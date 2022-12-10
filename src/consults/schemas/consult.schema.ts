@@ -8,15 +8,33 @@ export type ConsultDocument = Consult & Document;
 export class Consult {
   @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'patients', required: true})
   patient: mongoose.Schema.Types.ObjectId;
-
-  @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'employees'})
-  employee: mongoose.Schema.Types.ObjectId;
+  
+  @Prop({type: Number})
+  masa: number;
 
   @Prop({type: Number})
-  weight: number;
+  imc: number;
 
   @Prop({type: Number})
-  pressure: number;
+  per_abdominal: number;
+
+  @Prop({type: Number})
+  tension: number;
+
+  @Prop({type: Number})
+  trigliceridos: number;
+
+  @Prop({type: Number})
+  hdl: number;
+
+  @Prop({type: Number})
+  ldl: number;
+
+  @Prop({type: Number})
+  hemoglobina: number;
+
+  @Prop({type: Number})
+  glucosa: number;
 
   @Prop({type: String})
   comments: string;

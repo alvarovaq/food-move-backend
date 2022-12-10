@@ -33,6 +33,11 @@ export class ConsultsController {
     return await this.consultsService.find(findConsultDto);
   }
 
+  @Post('findByPatient/:id')
+  async findByPatient (@Param('id') id: string) {
+    return await this.consultsService.findByPatient(id);
+  }
+
   @Patch('update/:id')
   async update(@Param('id') id: string, @Body() updateConsultDto: UpdateConsultDto) {
     return await this.consultsService.update(id, updateConsultDto);

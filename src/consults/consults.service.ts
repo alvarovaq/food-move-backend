@@ -33,6 +33,11 @@ export class ConsultsService {
     return consults;
   }
 
+  async findByPatient (patientId: string) {
+    const consults = await this.consultModel.find({patient: patientId});
+    return consults;
+  }
+
   async update(id: string, updateConsultDto: UpdateConsultDto) {
     const updatedConsult = await this.consultModel.findByIdAndUpdate(id, updateConsultDto, {new: true});
     if (!updatedConsult) throw new NotFoundException('No se ha encontrado la consulta');
