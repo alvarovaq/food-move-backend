@@ -18,16 +18,13 @@ export class Move {
   @Prop({type: [String]})
   links: string[];
 
-  @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'employees'})
-  employee: mongoose.Schema.Types.ObjectId;
-
   @Prop({type: String})
   comments: string;
 
   @Prop({type: Date, required: true})
   date: Date;
 
-  @Prop({type: Boolean, required: true, default: false})
+  @Prop({type: Boolean, default: false})
   done: boolean;
 }
 

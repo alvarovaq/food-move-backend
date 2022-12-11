@@ -56,6 +56,7 @@ export class CreateConsultDto {
     
     @ApiProperty()
     @IsString()
+    @IsOptional()
     comments: string;
     
     @ApiProperty()

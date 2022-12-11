@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsEmail, IsString, IsBoolean, MaxLength, MinLength } from "class-validator";
+import { IsNotEmpty, IsEmail, IsString, IsBoolean, MaxLength, MinLength, IsOptional } from "class-validator";
 
 export class CreateEmployeeDto {
     @ApiProperty()
@@ -11,6 +11,7 @@ export class CreateEmployeeDto {
     @ApiProperty()
     @IsString()
     @MaxLength(255, {message: 'El apellido no es válido, es muy largo'})
+    @IsOptional()
     surname: string;
     
     @ApiProperty()
@@ -21,6 +22,7 @@ export class CreateEmployeeDto {
     
     @ApiProperty()
     @IsString()
+    @IsOptional()
     phone: string;
     
     @ApiProperty()
@@ -32,5 +34,6 @@ export class CreateEmployeeDto {
 
     @ApiProperty()
     @IsBoolean()
+    @IsOptional()
     admin: boolean;
 }

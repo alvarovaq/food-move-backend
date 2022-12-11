@@ -10,9 +10,9 @@ export class CreatePatientDto {
     name: string;
 
     @ApiProperty()
-    @IsOptional()
     @IsString()
     @MaxLength(255, {message: 'El apellido no es válido, es muy largo'})
+    @IsOptional()
     surname: string;
 
     @ApiProperty()
@@ -29,13 +29,13 @@ export class CreatePatientDto {
     password: string;
 
     @ApiProperty()
-    @IsOptional()
     @IsString()
+    @IsOptional()
     phone: string;
 
     @ApiProperty()
-    @IsOptional()
     @IsDate()
     @Type(() => Date)
+    @IsOptional()
     birth: Date;
 }

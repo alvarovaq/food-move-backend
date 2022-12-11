@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsArray, IsBoolean, IsDate, IsEnum, IsNotEmpty, IsSemVer, IsString, MaxLength } from "class-validator";
+import { IsArray, IsBoolean, IsDate, IsEnum, IsNotEmpty, IsOptional, IsSemVer, IsString, MaxLength } from "class-validator";
 import { IsObjectId } from "class-validator-mongo-object-id";
 export class CreateMoveDto {
     @ApiProperty()
@@ -17,6 +17,7 @@ export class CreateMoveDto {
     @ApiProperty()
     @IsString()
     @MaxLength(255, {message: 'Descripción no valido, demasiado largo'})
+    @IsOptional()
     description: string;
 
     @ApiProperty({isArray: true, type: String})
@@ -25,11 +26,8 @@ export class CreateMoveDto {
     links: string[];
 
     @ApiProperty()
-    @IsObjectId()
-    employee: string;
-
-    @ApiProperty()
     @IsString()
+    @IsOptional()
     comments: string;
 
     @ApiProperty()
@@ -40,5 +38,6 @@ export class CreateMoveDto {
 
     @ApiProperty()
     @IsBoolean()
+    @IsOptional()
     done: boolean;
 }

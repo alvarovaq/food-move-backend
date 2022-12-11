@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsArray, IsEnum, IsNotEmpty, IsString, MaxLength } from "class-validator";
+import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
 
 export class CreateRoutineDto {
     @ApiProperty()
@@ -12,6 +12,7 @@ export class CreateRoutineDto {
     @ApiProperty()
     @IsString()
     @MaxLength(255, {message: 'Descripción no valido, demasiado largo'})
+    @IsOptional()
     description: string;
 
     @ApiProperty({isArray: true, type: String})

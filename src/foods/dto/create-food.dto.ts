@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsArray, IsBoolean, IsDate, IsEnum, IsNotEmpty, IsNumber, IsString, MaxLength, ValidateNested } from "class-validator";
+import { IsArray, IsBoolean, IsDate, IsEnum, IsNotEmpty, IsNumber, IsString, MaxLength, ValidateNested, IsOptional } from 'class-validator';
 import { IsObjectId } from "class-validator-mongo-object-id";
 import { SubtypeFood } from "src/recipes/enums/subtype-food.enum";
 import { TypeFood } from "src/recipes/enums/type-food.enums";
@@ -13,10 +13,12 @@ class Ingredient {
 
     @ApiProperty()
     @IsNumber()
+    @IsOptional()
     quantity: number;
 
     @ApiProperty()
     @IsString()
+    @IsOptional()
     unit: string;
 }
 
@@ -35,6 +37,7 @@ export class CreateFoodDto {
     @ApiProperty()
     @IsString()
     @MaxLength(255, {message: 'Descripción no valido, demasiado largo'})
+    @IsOptional()
     description: string;
     
     @ApiProperty({enum: TypeFood, default: TypeFood.Comida})
@@ -51,11 +54,8 @@ export class CreateFoodDto {
     links: string[];
 
     @ApiProperty()
-    @IsObjectId()
-    employee: string;
-
-    @ApiProperty()
     @IsString()
+    @IsOptional()
     comments: string;
 
     @ApiProperty()
@@ -66,6 +66,7 @@ export class CreateFoodDto {
 
     @ApiProperty({default: false})
     @IsBoolean()
+    @IsOptional()
     done: boolean;
 
     @ApiProperty()
