@@ -33,7 +33,7 @@ export class ConsultsController {
     return await this.consultsService.find(findConsultDto);
   }
 
-  @Post('findByPatient/:id')
+  @Get('findByPatient/:id')
   async findByPatient (@Param('id') id: string) {
     return await this.consultsService.findByPatient(id);
   }
