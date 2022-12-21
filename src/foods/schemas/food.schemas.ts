@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
-import { TypeFood } from '../../recipes/enums/type-food.enums';
-import { SubtypeFood } from 'src/recipes/enums/subtype-food.enum';
+import { Mean } from '../../recipes/enums/mean';
+import { Dish } from 'src/recipes/enums/dish';
 
 export type FoodDocument = Food & Document;
 
@@ -18,11 +18,11 @@ export class Food {
   @Prop({type: String})
   description: string;
 
-  @Prop({type: String, enum: TypeFood, default: TypeFood.Comida})
-  type: TypeFood;
+  @Prop({type: String, enum: Mean, default: Mean.Comida})
+  mean: Mean;
 
-  @Prop({type: String, enum: SubtypeFood, default: SubtypeFood.Primero})
-  subtype: SubtypeFood;
+  @Prop({type: String, enum: Dish, default: Dish.Primero})
+  dish: Dish;
 
   @Prop({type: [String]})
   links: string[];

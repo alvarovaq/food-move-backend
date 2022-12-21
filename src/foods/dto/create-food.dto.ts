@@ -2,8 +2,8 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsArray, IsBoolean, IsDate, IsEnum, IsNotEmpty, IsNumber, IsString, MaxLength, ValidateNested, IsOptional } from 'class-validator';
 import { IsObjectId } from "class-validator-mongo-object-id";
-import { SubtypeFood } from "src/recipes/enums/subtype-food.enum";
-import { TypeFood } from "src/recipes/enums/type-food.enums";
+import { Dish } from "src/recipes/enums/dish";
+import { Mean } from "src/recipes/enums/mean";
 
 class Ingredient {
     @ApiProperty()
@@ -40,13 +40,13 @@ export class CreateFoodDto {
     @IsOptional()
     description: string;
     
-    @ApiProperty({enum: TypeFood, default: TypeFood.Comida})
-    @IsEnum(TypeFood)
-    type: TypeFood;
+    @ApiProperty({enum: Mean, default: Mean.Comida})
+    @IsEnum(Mean)
+    mean: Mean;
 
-    @ApiProperty({enum: SubtypeFood, default: SubtypeFood.Primero})
-    @IsEnum(SubtypeFood)
-    subtype: SubtypeFood;
+    @ApiProperty({enum: Dish, default: Dish.Primero})
+    @IsEnum(Dish)
+    dish: Dish;
 
     @ApiProperty({isArray: true, type: String})
     @IsArray()
