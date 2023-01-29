@@ -24,7 +24,7 @@ export class EmployeesController {
     return await this.employeesService.findAll();
   }
 
-  @Get('findOne/:id')
+  @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.employeesService.findOne(id);
   }
@@ -34,8 +34,8 @@ export class EmployeesController {
     return await this.employeesService.find(findEmployeeDto);
   }
 
-  @Post('findFirst')
-  async findFirst (@Body() FindEmployeeDto: FindEmployeeDto) {
+  @Post('lookUp')
+  async lookUp (@Body() FindEmployeeDto: FindEmployeeDto) {
     const employees = await this.employeesService.find(FindEmployeeDto);
     if (employees.length <= 0) throw new NotFoundException("No se ha encontrado ningún empleado");
     return employees[0];

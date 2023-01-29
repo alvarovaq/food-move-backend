@@ -23,7 +23,7 @@ export class RoutinesController {
     return await this.routinesService.findAll();
   }
 
-  @Get('findOne/:id')
+  @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.routinesService.findOne(id);
   }

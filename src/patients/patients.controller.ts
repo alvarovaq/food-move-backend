@@ -14,9 +14,9 @@ import { Request, RequestHandler } from 'express';
 export class PatientsController {
   constructor(private readonly patientsService: PatientsService) {}
 
-  @Post('create')
-  async create(@Body() createPatientDto: CreatePatientDto) {
-    return await this.patientsService.create(createPatientDto);
+  @Get('')
+  async search(@Req() req: Request) {
+    return await this.patientsService.search(req.query.s ? req.query.s.toString() : "", req.query.sort ? req.query.sort as string : "", parseInt(req.query.page as any), parseInt(req.query.limit as any));
   }
 
   @Get('findAll')
@@ -24,12 +24,7 @@ export class PatientsController {
     return await this.patientsService.findAll();
   }
 
-  @Get('findPag')
-  async findPag(@Req() req: Request) {
-    return await this.patientsService.findPag(req.query.s ? req.query.s.toString() : "", req.query.sort ? req.query.sort as string : "", parseInt(req.query.page as any), parseInt(req.query.limit as any));
-  }
-
-  @Get('findOne/:id')
+  @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.patientsService.findOne(id);
   }
@@ -39,7 +34,12 @@ export class PatientsController {
     return await this.patientsService.find(findPatientDto);
   }
 
-  @Patch('update/:id')
+  @Post('create')
+  async create(@Body() createPatientDto: CreatePatientDto) {
+    return await this.patientsService.create(createPatientDto);
+  }
+
+  @Patch('/update/:id')
   async update(@Param('id') id: string, @Body() updatePatientDto: UpdatePatientDto) {
     return await this.patientsService.update(id, updatePatientDto);
   }

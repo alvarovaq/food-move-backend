@@ -38,7 +38,7 @@ export class PatientsService {
     return await this.patientModel.find({}).exec();
   }
 
-  async findPag (s?: string, sort?: string, page?: number, limit?: number) {
+  async search (s?: string, sort?: string, page?: number, limit?: number) {
     let options = {};
     if (s) {
       const str = new RegExp(s.toString(), 'i');

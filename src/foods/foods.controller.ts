@@ -23,7 +23,7 @@ export class FoodsController {
     return await this.foodsService.findAll();
   }
 
-  @Get('findOne/:id')
+  @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.foodsService.findOne(id);
   }

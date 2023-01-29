@@ -23,7 +23,7 @@ export class ConsultsController {
     return await this.consultsService.findAll();
   }
 
-  @Get('findOne/:id')
+  @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.consultsService.findOne(id);
   }

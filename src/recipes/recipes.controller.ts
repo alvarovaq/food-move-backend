@@ -23,7 +23,7 @@ export class RecipesController {
     return await this.recipesService.findAll();
   }
 
-  @Get('findOne/:id')
+  @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.recipesService.findOne(id);
   }

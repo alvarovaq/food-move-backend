@@ -23,7 +23,7 @@ export class MovesController {
     return await this.movesService.findAll();
   }
 
-  @Get('findOne/:id')
+  @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.movesService.findOne(id);
   }
