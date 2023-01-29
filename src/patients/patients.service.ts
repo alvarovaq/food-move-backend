@@ -1,5 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { query, Request } from 'express';
 import { Model } from 'mongoose';
 import { ConsultsService } from 'src/consults/consults.service';
 import { FoodsService } from 'src/foods/foods.service';
@@ -11,6 +12,7 @@ import { FindPatientDto } from './dto/find-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 import { Patient } from './interfaces/patient.interface';
 import { PatientDocument } from './schemas/patient.schema';
+import { DEFAULT_LIMIT } from '../core/constants';
 
 @Injectable()
 export class PatientsService {
@@ -33,9 +35,38 @@ export class PatientsService {
   }
 
   async findAll() {
-    const patients = await this.patientModel.find({});
-    return patients;
+    return await this.patientModel.find({}).exec();
   }
+
+  async findPag (s?: string, sort?: string, page?: number, limit?: number) {
+    let options = {};
+    if (s) {
+      const str = new RegExp(s.toString(), 'i');
+      options = {$or: [{name: str}, {surname: str}, {email: str}, {phone: str}]};
+    }
+    const patients = this.patientModel.find(options);
+    if (sort) {
+      const sortDir = sort == "asc" ? 1 : -1;
+      patients.sort({name: sortDir, surname: sortDir});
+    }
+    
+    const pag: number = page || 1;
+    const lim: number = limit || DEFAULT_LIMIT;
+    const total: number = await this.count(options);
+
+    const items = await patients.skip((pag - 1) * lim).limit(lim).exec();
+      
+    return {
+      items,
+      total,
+      page: pag,
+      limit: lim
+    } 
+  }
+
+  async count (options): Promise<number> {
+    return await this.patientModel.count(options).exec();
+  } 
 
   async findOne(id: string) {
     const patient = await this.patientModel.findById(id);

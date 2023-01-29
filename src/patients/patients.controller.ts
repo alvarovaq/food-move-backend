@@ -1,11 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { PatientsService } from './patients.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { FindConsultDto } from 'src/consults/dto/find-consult.dto';
 import { FindPatientDto } from './dto/find-patient.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Request, RequestHandler } from 'express';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -22,6 +22,11 @@ export class PatientsController {
   @Get('findAll')
   async findAll() {
     return await this.patientsService.findAll();
+  }
+
+  @Get('findPag')
+  async findPag(@Req() req: Request) {
+    return await this.patientsService.findPag(req.query.s ? req.query.s.toString() : "", req.query.sort ? req.query.sort as string : "", parseInt(req.query.page as any), parseInt(req.query.limit as any));
   }
 
   @Get('findOne/:id')
