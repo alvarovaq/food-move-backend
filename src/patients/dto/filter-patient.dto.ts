@@ -3,7 +3,7 @@ import { CreatePatientDto } from "./create-patient.dto";
 import { IsObjectId } from 'class-validator-mongo-object-id';
 import { IsOptional, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { QueryDto } from '../../core/dto/query.dto';
+import { CustomQueryDto } from '../../core/dto/custom-query.dto';
 
 class PatientDto extends PartialType(OmitType(CreatePatientDto, ['password'] as const)) {
 
@@ -14,7 +14,7 @@ class PatientDto extends PartialType(OmitType(CreatePatientDto, ['password'] as 
     
 }
 
-export class FilterPatientDto extends QueryDto {
+export class FilterPatientDto extends CustomQueryDto {
 
     @ApiProperty()
     @Type(() => PatientDto)

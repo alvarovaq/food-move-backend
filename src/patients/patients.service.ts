@@ -1,6 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { query, Request } from 'express';
 import { Model } from 'mongoose';
 import { ConsultsService } from 'src/consults/consults.service';
 import { FoodsService } from 'src/foods/foods.service';
@@ -12,13 +11,14 @@ import { FilterPatientDto } from './dto/filter-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 import { Patient } from './interfaces/patient.interface';
 import { PatientDocument } from './schemas/patient.schema';
-import { CustomQuery } from 'src/core/interfaces/custom-query.interface';
+import { CustomQueryService } from '../core/services/custom-query.service';
 
 @Injectable()
 export class PatientsService {
 
   constructor (
     @Inject(UsersService) private readonly usersService: UsersService,
+    @Inject(CustomQueryService) private readonly customQueryService: CustomQueryService,
     @Inject(ConsultsService) private readonly consultsService: ConsultsService,
     @Inject(FoodsService) private readonly foodsService: FoodsService,
     @Inject(MovesService) private readonly movesService: MovesService,
@@ -38,49 +38,7 @@ export class PatientsService {
   }
 
   async filter (query: FilterPatientDto) {
-    const {filter, search, paging, sorting} = query;
-
-    const patients = this.patientModel.find(filter);
-    
-    let options = {};
-    if (search) {
-      options = {$or: search.fields.map((field) => {
-        let res = {};
-        res[field] = new RegExp(search.search, 'i');
-        return res;
-      })};
-    }
-    const data = patients.find(options);
-    
-    if (sorting) {
-      let sort = {};
-      sorting.forEach((s) => {
-        sort[s.field] = s.direction;
-      });
-      data.sort(sort);
-    }
-
-    let items;
-
-    if (paging) {
-      items = await data.skip((paging.page - 1) * paging.limit).limit(paging.limit).exec();
-    } else {
-      items = await data.exec();
-    }
-    
-    const total = await this.patientModel.count(filter).count(options).exec();
-
-    return {
-      items,
-      total,
-      page: paging ? paging.page : 1,
-      limit: paging ? paging.limit : total
-    }
-  }
-
-  async count (filter: FilterPatientDto, options) {
-    const c = this.patientModel.count(filter);
-    return await c.count(options).exec()
+    return await this.customQueryService.filter(query, this.patientModel);
   }
 
   async create(createPatientDto: CreatePatientDto) {

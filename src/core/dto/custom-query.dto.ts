@@ -35,14 +35,13 @@ class Sorting {
     field: string;
 
     @ApiProperty()
-    @IsString()
     @IsIn(["asc", "desc", "ascending", "descending"])
     @IsOptional()
-    direction: string = "asc";
+    direction: 'asc' | 'desc' | 'ascending' | 'descending' = "asc";
 
 }
 
-export class QueryDto {
+export class CustomQueryDto {
 
     @ApiProperty()
     @Type(() => Search)
