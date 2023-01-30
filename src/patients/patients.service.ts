@@ -8,11 +8,11 @@ import { MovesService } from 'src/moves/moves.service';
 import { User } from 'src/users/interfaces/user.interface';
 import { UsersService } from 'src/users/users.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
-import { FindPatientDto } from './dto/find-patient.dto';
+import { FilterPatientDto } from './dto/filter-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 import { Patient } from './interfaces/patient.interface';
 import { PatientDocument } from './schemas/patient.schema';
-import { DEFAULT_LIMIT } from '../core/constants';
+import { CustomQuery } from 'src/core/interfaces/custom-query.interface';
 
 @Injectable()
 export class PatientsService {
@@ -25,6 +25,64 @@ export class PatientsService {
     @InjectModel('patients') private readonly patientModel: Model<PatientDocument>
   ) {}
 
+  async findOne(id: string) {
+    const patient = await this.patientModel.findById(id);
+    if (!patient) throw new NotFoundException('No se ha encontrado al paciente');
+    return patient;
+  }
+
+  async lookUp (filterPatientDto: FilterPatientDto) {
+    const patient = await this.patientModel.findOne(filterPatientDto);
+    if (!patient) throw new NotFoundException('No se ha encontrado ningún resultado');
+    return patient;
+  }
+
+  async filter (query: FilterPatientDto) {
+    const {filter, search, paging, sorting} = query;
+
+    const patients = this.patientModel.find(filter);
+    
+    let options = {};
+    if (search) {
+      options = {$or: search.fields.map((field) => {
+        let res = {};
+        res[field] = new RegExp(search.search, 'i');
+        return res;
+      })};
+    }
+    const data = patients.find(options);
+    
+    if (sorting) {
+      let sort = {};
+      sorting.forEach((s) => {
+        sort[s.field] = s.direction;
+      });
+      data.sort(sort);
+    }
+
+    let items;
+
+    if (paging) {
+      items = await data.skip((paging.page - 1) * paging.limit).limit(paging.limit).exec();
+    } else {
+      items = await data.exec();
+    }
+    
+    const total = await this.patientModel.count(filter).count(options).exec();
+
+    return {
+      items,
+      total,
+      page: paging ? paging.page : 1,
+      limit: paging ? paging.limit : total
+    }
+  }
+
+  async count (filter: FilterPatientDto, options) {
+    const c = this.patientModel.count(filter);
+    return await c.count(options).exec()
+  }
+
   async create(createPatientDto: CreatePatientDto) {
     const {email, password} = createPatientDto;
     const user = new User(email, password, false);
@@ -32,50 +90,6 @@ export class PatientsService {
     const patient = new Patient(createPatientDto);
     const createdPatient = await this.patientModel.create(patient);
     return createdPatient;
-  }
-
-  async findAll() {
-    return await this.patientModel.find({}).exec();
-  }
-
-  async search (s?: string, sort?: string, page?: number, limit?: number) {
-    let options = {};
-    if (s) {
-      const str = new RegExp(s.toString(), 'i');
-      options = {$or: [{name: str}, {surname: str}, {email: str}, {phone: str}]};
-    }
-    const patients = this.patientModel.find(options);
-    if (sort) {
-      const sortDir = sort == "asc" ? 1 : -1;
-      patients.sort({name: sortDir, surname: sortDir});
-    }
-    
-    const pag: number = page || 1;
-    const lim: number = limit || DEFAULT_LIMIT;
-    const total: number = await this.count(options);
-
-    const items = await patients.skip((pag - 1) * lim).limit(lim).exec();
-      
-    return {
-      items,
-      total,
-      page: pag,
-      limit: lim
-    } 
-  }
-
-  async count (options): Promise<number> {
-    return await this.patientModel.count(options).exec();
-  } 
-
-  async findOne(id: string) {
-    const patient = await this.patientModel.findById(id);
-    if (!patient) throw new NotFoundException('No se ha encontrado al paciente');
-    return patient;
-  }
-
-  async find (findPatientDto: FindPatientDto) {
-    return await this.patientModel.find(findPatientDto);
   }
 
   async update(id: string, updatePatientDto: UpdatePatientDto) {
