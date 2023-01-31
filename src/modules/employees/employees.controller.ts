@@ -5,7 +5,7 @@ import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ValidationTypes } from 'class-validator';
 import { FindEmployeeDto } from './dto/find-employee.dto';
-import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)

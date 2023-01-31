@@ -7,16 +7,18 @@ import { MovesService } from 'src/modules/moves/moves.service';
 import { User } from 'src/modules/users/interfaces/user.interface';
 import { UsersService } from 'src/modules/users/users.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
-import { FilterPatientDto } from './dto/filter-patient.dto';
+import { QueryPatientDto } from './dto/query-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
-import { Patient } from './interfaces/patient.interface';
 import { PatientDocument } from './schemas/patient.schema';
 import { CustomQueryService } from 'src/services/custom-query.service';
+import { FilterPatientDto } from './dto/filter-patient.dto';
+import { PatientPipe } from './pipes/patient.pipe';
 
 @Injectable()
 export class PatientsService {
 
   constructor (
+    private readonly patientPipe: PatientPipe,
     @Inject(UsersService) private readonly usersService: UsersService,
     @Inject(CustomQueryService) private readonly customQueryService: CustomQueryService,
     @Inject(ConsultsService) private readonly consultsService: ConsultsService,
@@ -31,22 +33,21 @@ export class PatientsService {
     return patient;
   }
 
-  async lookUp (filterPatientDto: FilterPatientDto) {
-    const patient = await this.patientModel.findOne(filterPatientDto);
+  async lookUp (filter: FilterPatientDto) {
+    const patient = await this.patientModel.findOne(filter);
     if (!patient) throw new NotFoundException('No se ha encontrado ningún resultado');
     return patient;
   }
 
-  async filter (query: FilterPatientDto) {
-    return await this.customQueryService.filter(query, this.patientModel);
+  async filter (queryPatientDto: QueryPatientDto) {
+    return await this.customQueryService.filter(queryPatientDto, this.patientModel);
   }
 
   async create(createPatientDto: CreatePatientDto) {
     const {email, password} = createPatientDto;
     const user = new User(email, password, false);
     await this.usersService.createUser(user);
-    const patient = new Patient(createPatientDto);
-    const createdPatient = await this.patientModel.create(patient);
+    const createdPatient = await this.patientModel.create(this.patientPipe.transform(createPatientDto));
     return createdPatient;
   }
 

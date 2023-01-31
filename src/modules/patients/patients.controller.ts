@@ -2,9 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } f
 import { PatientsService } from './patients.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
-import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { QueryPatientDto } from './dto/query-patient.dto';
+import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 import { FilterPatientDto } from './dto/filter-patient.dto';
-import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -26,8 +27,8 @@ export class PatientsController {
   }
 
   @Post('filter')
-  async filter(@Body() filterPatientDto: FilterPatientDto) {
-    return await this.patientsService.filter(filterPatientDto);
+  async filter(@Body() queryPatientDto: QueryPatientDto) {
+    return await this.patientsService.filter(queryPatientDto);
   }
 
   @Post('create')

@@ -11,12 +11,12 @@ export class AuthService {
     async login (authUserDto: AuthUserDto) {
         const {email, password} = authUserDto;
         const user = await this.usersService.login(email, password);
-        const payload = {id: user._id, name: user.email}
+        const payload = {id: user._id, name: user.email};
         const token = await this.jwtAuthService.sign(payload);
         const data = {
             user,
             token
-        }
+        };
         return data;
     }
 

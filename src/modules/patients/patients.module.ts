@@ -8,6 +8,7 @@ import { ConsultsModule } from 'src/modules/consults/consults.module';
 import { FoodsModule } from 'src/modules/foods/foods.module';
 import { MovesModule } from 'src/modules/moves/moves.module';
 import { CustomQueryService } from 'src/services/custom-query.service';
+import { PatientPipe } from './pipes/patient.pipe';
 
 @Module({
   imports: [MongooseModule.forFeature([
@@ -22,6 +23,6 @@ import { CustomQueryService } from 'src/services/custom-query.service';
     MovesModule
   ],
   controllers: [PatientsController],
-  providers: [PatientsService, CustomQueryService]
+  providers: [PatientsService, CustomQueryService, PatientPipe]
 })
 export class PatientsModule {}

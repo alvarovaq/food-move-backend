@@ -4,6 +4,7 @@ import { EmployeesController } from './employees.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EmployeeSchema } from './schema/employee.schema';
 import { UsersModule } from 'src/modules/users/users.module';
+import { EmployeePipe } from './pipes/employee.pipe';
 
 @Module({
   imports: [MongooseModule.forFeature([
@@ -13,6 +14,6 @@ import { UsersModule } from 'src/modules/users/users.module';
     }
   ]), UsersModule],
   controllers: [EmployeesController],
-  providers: [EmployeesService]
+  providers: [EmployeesService, EmployeePipe]
 })
 export class EmployeesModule {}

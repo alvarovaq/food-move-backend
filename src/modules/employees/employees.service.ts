@@ -6,13 +6,17 @@ import { UsersService } from 'src/modules/users/users.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { FindEmployeeDto } from './dto/find-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
-import { Employee } from './interfaces/employee.interface';
 import { EmployeeDocument } from './schema/employee.schema';
+import { EmployeePipe } from './pipes/employee.pipe';
 
 @Injectable()
 export class EmployeesService {
 
-  constructor (@Inject(UsersService) private readonly usersService: UsersService, @InjectModel('employees') private readonly employeeModel: Model<EmployeeDocument>) {}
+  constructor (
+    private readonly employeePipe: EmployeePipe,
+    @Inject(UsersService) private readonly usersService: UsersService,
+    @InjectModel('employees') private readonly employeeModel: Model<EmployeeDocument>
+  ) {}
 
   async create(createEmployeeDto: CreateEmployeeDto) {
     const {email, password} = createEmployeeDto;
@@ -20,8 +24,7 @@ export class EmployeesService {
     if (findEmployee) throw new NotFoundException('Ya existe un empleado con ese email');
     const user = new User(email, password, true);
     await this.usersService.createUser(user);
-    const employee = new Employee(createEmployeeDto);
-    const createdEmployee = await this.employeeModel.create(employee);
+    const createdEmployee = await this.employeeModel.create(this.employeePipe.transform(createEmployeeDto));
     return createdEmployee;
   }
 
