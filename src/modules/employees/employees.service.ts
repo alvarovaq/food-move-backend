@@ -4,19 +4,38 @@ import { Model } from 'mongoose';
 import { User } from 'src/modules/users/interfaces/user.interface';
 import { UsersService } from 'src/modules/users/users.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
-import { FindEmployeeDto } from './dto/find-employee.dto';
+import { FilterEmployeeDto } from './dto/filter-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { EmployeeDocument } from './schema/employee.schema';
 import { EmployeePipe } from './pipes/employee.pipe';
+import { QueryEmployeeDto } from './dto/query-employee.dto';
+import { CustomQueryService } from '../../services/custom-query.service';
 
 @Injectable()
 export class EmployeesService {
 
   constructor (
     private readonly employeePipe: EmployeePipe,
+    private readonly customQueryService: CustomQueryService,
     @Inject(UsersService) private readonly usersService: UsersService,
     @InjectModel('employees') private readonly employeeModel: Model<EmployeeDocument>
   ) {}
+
+  async findOne(id: string) {
+    const employee = await this.employeeModel.findById(id);
+    if (!employee) throw new NotFoundException('No se ha encontrado al empleado');
+    return employee;
+  }
+
+  async lookUp (filter: FilterEmployeeDto) {
+    const employee = await this.employeeModel.findOne(filter);
+    if (!employee) throw new NotFoundException('No se ha encontrado ningún resultado');
+    return employee;
+  }
+
+  async filter (queryEmployeeDto: QueryEmployeeDto) {
+    return await this.customQueryService.filter(queryEmployeeDto, this.employeeModel);
+  }
 
   async create(createEmployeeDto: CreateEmployeeDto) {
     const {email, password} = createEmployeeDto;
@@ -26,22 +45,6 @@ export class EmployeesService {
     await this.usersService.createUser(user);
     const createdEmployee = await this.employeeModel.create(this.employeePipe.transform(createEmployeeDto));
     return createdEmployee;
-  }
-
-  async findAll() {
-    const employees = await this.employeeModel.find({});
-    return employees;
-  }
-
-  async findOne(id: string) {
-    const employee = await this.employeeModel.findById(id);
-    if (!employee) throw new NotFoundException('No se ha encontrado al empleado');
-    return employee;
-  }
-
-  async find (findEmployeeDto: FindEmployeeDto) {
-    const employees = await this.employeeModel.find(findEmployeeDto);
-    return employees;
   }
 
   async update(id: string, updateEmployeeDto: UpdateEmployeeDto) {

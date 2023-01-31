@@ -4,8 +4,9 @@ import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ValidationTypes } from 'class-validator';
-import { FindEmployeeDto } from './dto/find-employee.dto';
+import { FilterEmployeeDto } from './dto/filter-employee.dto';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { QueryEmployeeDto } from './dto/query-employee.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -14,31 +15,24 @@ import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
 
-  @Post('create')
-  async create(@Body() createEmployeeDto: CreateEmployeeDto) {
-    return await this.employeesService.create(createEmployeeDto);
-  }
-
-  @Get('findAll')
-  async findAll() {
-    return await this.employeesService.findAll();
-  }
-
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.employeesService.findOne(id);
   }
 
-  @Post('find')
-  async find (@Body() findEmployeeDto: FindEmployeeDto) {
-    return await this.employeesService.find(findEmployeeDto);
+  @Post('lookUp')
+  async lookUp (@Body() filterEmployeeDto: FilterEmployeeDto) {
+    return await this.employeesService.lookUp(filterEmployeeDto);
   }
 
-  @Post('lookUp')
-  async lookUp (@Body() FindEmployeeDto: FindEmployeeDto) {
-    const employees = await this.employeesService.find(FindEmployeeDto);
-    if (employees.length <= 0) throw new NotFoundException("No se ha encontrado ningún empleado");
-    return employees[0];
+  @Post('filter')
+  async filter (@Body() queryEmployee: QueryEmployeeDto) {
+    return await this.employeesService.filter(queryEmployee);
+  }
+
+  @Post('create')
+  async create(@Body() createEmployeeDto: CreateEmployeeDto) {
+    return await this.employeesService.create(createEmployeeDto);
   }
   
   @Patch('update/:id')

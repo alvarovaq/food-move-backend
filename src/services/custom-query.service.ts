@@ -7,7 +7,7 @@ export class CustomQueryService {
 
     async filter (customQuery: any, model: Model<any>) {
         const {filter, search, paging, sorting} = customQuery;
-        const patients = model.find(filter);
+        const patients = model.find(filter || {});
         
         let options = {};
         if (search) {

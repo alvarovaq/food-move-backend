@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { EmployeeSchema } from './schema/employee.schema';
 import { UsersModule } from 'src/modules/users/users.module';
 import { EmployeePipe } from './pipes/employee.pipe';
+import { CustomQueryService } from '../../services/custom-query.service';
 
 @Module({
   imports: [MongooseModule.forFeature([
@@ -14,6 +15,6 @@ import { EmployeePipe } from './pipes/employee.pipe';
     }
   ]), UsersModule],
   controllers: [EmployeesController],
-  providers: [EmployeesService, EmployeePipe]
+  providers: [EmployeesService, CustomQueryService, EmployeePipe]
 })
 export class EmployeesModule {}
