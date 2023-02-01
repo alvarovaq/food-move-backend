@@ -2,9 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { RecipesService } from './recipes.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
-import { FindRecipeDto } from './dto/find-recipe.dto';
+import { FilterRecipeDto } from './dto/filter-recipe.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { QueryRecipeDto } from './dto/query-recipe.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -13,24 +14,24 @@ import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 export class RecipesController {
   constructor(private readonly recipesService: RecipesService) {}
 
-  @Post('create')
-  async create(@Body() createRecipeDto: CreateRecipeDto) {
-    return await this.recipesService.create(createRecipeDto);
-  }
-
-  @Get('findAll')
-  async findAll() {
-    return await this.recipesService.findAll();
-  }
-
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.recipesService.findOne(id);
   }
 
-  @Post('find')
-  async find (@Body() findRecipeDto: FindRecipeDto) {
-    return await this.recipesService.find(findRecipeDto);
+  @Post('lookUp')
+  async lookUp(@Body() filterRecipeDto: FilterRecipeDto) {
+    return await this.recipesService.lookUp(filterRecipeDto);
+  }
+
+  @Post('filter')
+  async filter(@Body() queryRecipeDto: QueryRecipeDto) {
+    return await this.recipesService.filter(queryRecipeDto);
+  }
+
+  @Post('create')
+  async create(@Body() createRecipeDto: CreateRecipeDto) {
+    return await this.recipesService.create(createRecipeDto);
   }
 
   @Patch('update/:id')

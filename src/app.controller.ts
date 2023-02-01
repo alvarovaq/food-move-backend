@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
 
@@ -9,5 +9,10 @@ export class AppController {
   @Get()
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  @Get('image')
+  getImage (@Res() res) {
+    res.sendFile('prueba.jpg', {root: 'src/uploads'})
   }
 }

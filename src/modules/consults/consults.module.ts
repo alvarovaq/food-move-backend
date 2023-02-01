@@ -3,6 +3,7 @@ import { ConsultsService } from './consults.service';
 import { ConsultsController } from './consults.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConsultSchema } from './schemas/consult.schema';
+import { CustomQueryService } from '../../services/custom-query.service';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import { ConsultSchema } from './schemas/consult.schema';
   ],
   controllers: [ConsultsController],
   providers: [ConsultsService],
-  exports: [ConsultsService]
+  exports: [ConsultsService, CustomQueryService]
 })
 export class ConsultsModule {}

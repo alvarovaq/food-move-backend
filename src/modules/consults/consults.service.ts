@@ -1,26 +1,21 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { NotFoundError } from 'rxjs';
+import { CustomQueryService } from 'src/services/custom-query.service';
 import { CreateConsultDto } from './dto/create-consult.dto';
-import { FindConsultDto } from './dto/find-consult.dto';
+import { FilterConsultDto } from './dto/filter-consult.dto';
+import { QueryConsultDto } from './dto/query-consult.dto';
 import { UpdateConsultDto } from './dto/update-consult.dto';
 import { Consult, ConsultDocument } from './schemas/consult.schema';
 
 @Injectable()
 export class ConsultsService {
 
-  constructor (@InjectModel('consults') private readonly consultModel: Model<ConsultDocument>) {}
-
-  async create(createConsultDto: CreateConsultDto) {
-    const consult = await this.consultModel.create(createConsultDto);
-    return consult;
-  }
-
-  async findAll() {
-    const consutls = await this.consultModel.find({});
-    return consutls;
-  }
+  constructor (
+    @Inject(CustomQueryService) private readonly customQueryService: CustomQueryService,
+    @InjectModel('consults') private readonly consultModel: Model<ConsultDocument>
+  ) {}
 
   async findOne(id: string) {
     const consult = await this.consultModel.findById(id);
@@ -28,14 +23,24 @@ export class ConsultsService {
     return consult;
   }
 
-  async find (findConsultDto: FindConsultDto) {
-    const consults = await this.consultModel.find(findConsultDto);
-    return consults;
-  }
-
   async findByPatient (patientId: string) {
     const consults = await this.consultModel.find({patient: patientId});
     return consults;
+  }
+
+  async lookUp(filterConsultDto: FilterConsultDto) {
+    const consult = await this.consultModel.findOne(filterConsultDto);
+    if (!consult) throw new NotFoundException('No se ha encontrado ningún resultado');
+    return consult;
+  }
+
+  async filter (queryConsultDto: QueryConsultDto) {
+    return await this.customQueryService.filter(queryConsultDto, this.consultModel);
+  }
+
+  async create(createConsultDto: CreateConsultDto) {
+    const consult = await this.consultModel.create(createConsultDto);
+    return consult;
   }
 
   async update(id: string, updateConsultDto: UpdateConsultDto) {

@@ -1,35 +1,40 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { CustomQueryService } from 'src/services/custom-query.service';
+import { QueryPatientDto } from '../patients/dto/query-patient.dto';
 import { CreateRoutineDto } from './dto/create-routine.dto';
-import { FindRoutineDto } from './dto/find-routine.dto';
+import { FilterRoutineDto } from './dto/filter-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
 import { RoutineDocument } from './schemas/routine.schemas';
 
 @Injectable()
 export class RoutinesService {
 
-  constructor (@InjectModel('routines') private readonly routineModel: Model<RoutineDocument>) {}
-
-  async create(createRoutineDto: CreateRoutineDto) {
-    const routine = await this.routineModel.create(createRoutineDto);
-    return routine;
-  }
-
-  async findAll() {
-    const routines = await this.routineModel.find({});
-    return routines;
-  }
+  constructor (
+    @Inject(CustomQueryService) private readonly customQueryService: CustomQueryService,
+    @InjectModel('routines') private readonly routineModel: Model<RoutineDocument>
+  ) {}
 
   async findOne(id: string) {
     const routine = await this.routineModel.findById(id);
     if (!routine) throw new NotFoundException('No se ha encontrado la rutina');
     return routine;
   }
-  
-  async find (findRoutineDto: FindRoutineDto) {
-    const routines = await this.routineModel.find(findRoutineDto);
-    return routines;
+
+  async lookUp (filter: FilterRoutineDto) {
+    const routine = await this.routineModel.findOne(filter);
+    if (!routine) throw new NotFoundException('No se ha encontrado ningún resultado');
+    return routine;
+  }
+
+  async filter (queryRoutineDto: QueryPatientDto) {
+    return await this.customQueryService.filter(queryRoutineDto, this.routineModel);
+  }
+
+  async create(createRoutineDto: CreateRoutineDto) {
+    const routine = await this.routineModel.create(createRoutineDto);
+    return routine;
   }
 
   async update(id: string, updateRoutineDto: UpdateRoutineDto) {

@@ -3,8 +3,9 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 import { ConsultsService } from './consults.service';
 import { CreateConsultDto } from './dto/create-consult.dto';
-import { FindConsultDto } from './dto/find-consult.dto';
+import { FilterConsultDto } from './dto/filter-consult.dto';
 import { UpdateConsultDto } from './dto/update-consult.dto';
+import { QueryConsultDto } from './dto/query-consult.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -13,24 +14,24 @@ import { UpdateConsultDto } from './dto/update-consult.dto';
 export class ConsultsController {
   constructor(private readonly consultsService: ConsultsService) {}
 
-  @Post('create')
-  async create(@Body() createConsultDto: CreateConsultDto) {
-    return await this.consultsService.create(createConsultDto);
-  }
-
-  @Get('findAll')
-  async findAll() {
-    return await this.consultsService.findAll();
-  }
-
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.consultsService.findOne(id);
   }
 
-  @Post('find')
-  async find (@Body() findConsultDto: FindConsultDto) {
-    return await this.consultsService.find(findConsultDto);
+  @Post('lookUp')
+  async lookUp(@Body() filterConsultDto: FilterConsultDto) {
+    return await this.consultsService.lookUp(filterConsultDto);
+  }
+
+  @Post('filter')
+  async filter(@Body() queryConsultDto: QueryConsultDto) {
+    return await this.consultsService.filter(queryConsultDto);
+  }
+
+  @Post('create')
+  async create(@Body() createConsultDto: CreateConsultDto) {
+    return await this.consultsService.create(createConsultDto);
   }
 
   @Get('findByPatient/:id')

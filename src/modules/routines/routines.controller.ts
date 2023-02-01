@@ -3,8 +3,9 @@ import { RoutinesService } from './routines.service';
 import { CreateRoutineDto } from './dto/create-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { FindRoutineDto } from './dto/find-routine.dto';
+import { FilterRoutineDto } from './dto/filter-routine.dto';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { QueryRoutineDto } from './dto/query-routine.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -13,24 +14,24 @@ import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 export class RoutinesController {
   constructor(private readonly routinesService: RoutinesService) {}
 
-  @Post('create')
-  async create(@Body() createRoutineDto: CreateRoutineDto) {
-    return await this.routinesService.create(createRoutineDto);
-  }
-
-  @Get('findAll')
-  async findAll() {
-    return await this.routinesService.findAll();
-  }
-
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.routinesService.findOne(id);
   }
 
-  @Post('find')
-  async find (@Body() findRoutineDto: FindRoutineDto) {
-    return await this.routinesService.find(findRoutineDto);
+  @Post('lookUp')
+  async lookUp(@Body() filterRoutineDto: FilterRoutineDto) {
+    return await this.routinesService.lookUp(filterRoutineDto);
+  }
+
+  @Post('filter')
+  async filter(@Body() queryRoutineDto: QueryRoutineDto) {
+    return await this.routinesService.filter(queryRoutineDto);
+  }
+
+  @Post('create')
+  async create(@Body() createRoutineDto: CreateRoutineDto) {
+    return await this.routinesService.create(createRoutineDto);
   }
 
   @Patch('update/:id')

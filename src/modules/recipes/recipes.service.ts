@@ -1,26 +1,20 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { receiveMessageOnPort } from 'worker_threads';
+import { CustomQueryService } from 'src/services/custom-query.service';
+import { QueryPatientDto } from '../patients/dto/query-patient.dto';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
-import { FindRecipeDto } from './dto/find-recipe.dto';
+import { FilterRecipeDto } from './dto/filter-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { RecipeDocument } from './schemas/recipe.schemas';
 
 @Injectable()
 export class RecipesService {
 
-  constructor (@InjectModel('recipes') private readonly recipeModel: Model<RecipeDocument>) {}
-
-  async create(createRecipeDto: CreateRecipeDto) {
-    const recipe = await this.recipeModel.create(createRecipeDto);
-    return recipe;
-  }
-
-  async findAll() {
-    const recipes = await this.recipeModel.find({});
-    return recipes;
-  }
+  constructor (
+    @Inject(CustomQueryService) private readonly customQueryService: CustomQueryService,
+    @InjectModel('recipes') private readonly recipeModel: Model<RecipeDocument>
+  ) {}
 
   async findOne(id: string) {
     const recipe = await this.recipeModel.findById(id);
@@ -28,9 +22,19 @@ export class RecipesService {
     return recipe;
   }
 
-  async find (findRecipeDto: FindRecipeDto) {
-    const recipes = await this.recipeModel.find(findRecipeDto);
-    return recipes;
+  async lookUp (filter: FilterRecipeDto) {
+    const recipe = await this.recipeModel.findOne(filter);
+    if (!recipe) throw new NotFoundException('No se ha encontrado ningún resultado');
+    return recipe;
+  }
+
+  async filter (queryPatientDto: QueryPatientDto) {
+    return await this.customQueryService.filter(queryPatientDto, this.recipeModel);
+  }
+
+  async create(createRecipeDto: CreateRecipeDto) {
+    const recipe = await this.recipeModel.create(createRecipeDto);
+    return recipe;
   }
 
   async update(id: string, updateRecipeDto: UpdateRecipeDto) {
