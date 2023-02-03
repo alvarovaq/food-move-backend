@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, NotFoundException, UseInterceptors, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
 import { EmployeesService } from './employees.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
@@ -7,6 +7,9 @@ import { ValidationTypes } from 'class-validator';
 import { FilterEmployeeDto } from './dto/filter-employee.dto';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 import { QueryEmployeeDto } from './dto/query-employee.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Storage } from 'src/constants/uploads.constants';
+import { MAX_SIZE_IMAGE } from '../../constants/uploads.constants';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -44,4 +47,16 @@ export class EmployeesController {
   async remove(@Param('id') id: string) {
     return await this.employeesService.remove(id);
   }
+
+  @Post('upload/:id')
+  @UseInterceptors(FileInterceptor('file', Storage))
+  async upload (@Param('id') id: string, @UploadedFile(new ParseFilePipe({validators: [new MaxFileSizeValidator({maxSize: MAX_SIZE_IMAGE}), new FileTypeValidator({fileType: 'image/*'})]})) file: Express.Multer.File) {
+    return await this.employeesService.upload(id, file);
+  }
+
+  @Get('remove-profile-image/:id')
+  async removeProfileImage (@Param('id') id: string) {
+    return await this.employeesService.removeProfileImage(id);
+  } 
+  
 }

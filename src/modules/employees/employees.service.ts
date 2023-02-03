@@ -10,6 +10,7 @@ import { EmployeeDocument } from './schema/employee.schema';
 import { EmployeePipe } from './pipes/employee.pipe';
 import { QueryEmployeeDto } from './dto/query-employee.dto';
 import { CustomQueryService } from '../../services/custom-query.service';
+import { FilesService } from '../files/files.service';
 
 @Injectable()
 export class EmployeesService {
@@ -17,6 +18,7 @@ export class EmployeesService {
   constructor (
     private readonly employeePipe: EmployeePipe,
     private readonly customQueryService: CustomQueryService,
+    @Inject(FilesService) private readonly filesService: FilesService,
     @Inject(UsersService) private readonly usersService: UsersService,
     @InjectModel('employees') private readonly employeeModel: Model<EmployeeDocument>
   ) {}
@@ -67,4 +69,16 @@ export class EmployeesService {
     await this.usersService.removeUser(deletedEmployee.email);
     return deletedEmployee;
   }
+
+  async upload (id: string, file: Express.Multer.File) {
+    await this.removeProfileImage(id, false);
+    return await this.employeeModel.findByIdAndUpdate(id, {profile_image: file.filename}, {new: true});
+  }
+
+  async removeProfileImage (id: string, updateEmployee: boolean = true) {
+    const employee = await this.employeeModel.findById(id);
+    await this.filesService.removeProfileImage(employee.profile_image);
+    if(updateEmployee) await this.employeeModel.findByIdAndUpdate(id, {profile_image: undefined});
+  }
+
 }

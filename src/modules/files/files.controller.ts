@@ -1,0 +1,18 @@
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiParam, ApiProduces, ApiTags } from '@nestjs/swagger';
+import { DESTINATION_PROFILE_IMAGE } from 'src/constants/uploads.constants';
+import { FilesService } from './files.service';
+
+@ApiBearerAuth()
+@ApiTags('files')
+@Controller('files')
+export class FilesController {
+  constructor(private readonly filesService: FilesService) {}
+  
+  @Get('profile-image/:filename?')
+  async getProfileImage(@Param('filename') filename?: string, @Res() res?) {
+    const imagename = await this.filesService.getProfileImage(filename);
+    return res.sendFile(imagename, {root: DESTINATION_PROFILE_IMAGE})
+  }
+
+}

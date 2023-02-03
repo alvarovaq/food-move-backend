@@ -1,6 +1,7 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
+import { DESTINATION_PROFILE_IMAGE } from './constants/uploads.constants';
 
 @Controller()
 export class AppController {
@@ -11,8 +12,8 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get('image')
-  getImage (@Res() res) {
-    res.sendFile('prueba.jpg', {root: 'src/uploads'})
+  @Get('profile-image/:imagename')
+  getImage (@Param('imagename') imagename, @Res() res) {
+    res.sendFile(imagename, {root: DESTINATION_PROFILE_IMAGE})
   }
 }

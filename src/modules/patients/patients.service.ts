@@ -13,6 +13,7 @@ import { PatientDocument } from './schemas/patient.schema';
 import { CustomQueryService } from 'src/services/custom-query.service';
 import { FilterPatientDto } from './dto/filter-patient.dto';
 import { PatientPipe } from './pipes/patient.pipe';
+import { FilesService } from '../files/files.service';
 
 @Injectable()
 export class PatientsService {
@@ -20,6 +21,7 @@ export class PatientsService {
   constructor (
     private readonly patientPipe: PatientPipe,
     @Inject(UsersService) private readonly usersService: UsersService,
+    @Inject(FilesService) private readonly filesService: FilesService,
     @Inject(CustomQueryService) private readonly customQueryService: CustomQueryService,
     @Inject(ConsultsService) private readonly consultsService: ConsultsService,
     @Inject(FoodsService) private readonly foodsService: FoodsService,
@@ -74,4 +76,16 @@ export class PatientsService {
     await this.movesService.removeByPatient(deletedPatient._id);
     return deletedPatient;
   }
+
+  async upload (id: string, file: Express.Multer.File) {
+    await this.removeProfileImage(id, false);
+    return await this.patientModel.findByIdAndUpdate(id, {profile_image: file.filename}, {new: true});
+  }
+
+  async removeProfileImage (id: string, updatePatient: boolean = true) {
+    const patient = await this.patientModel.findById(id);
+    await this.filesService.removeProfileImage(patient.profile_image);
+    if(updatePatient) await this.patientModel.findByIdAndUpdate(id, {profile_image: undefined});
+  }
+
 }

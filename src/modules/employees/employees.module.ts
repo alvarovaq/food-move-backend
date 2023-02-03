@@ -6,6 +6,7 @@ import { EmployeeSchema } from './schema/employee.schema';
 import { UsersModule } from 'src/modules/users/users.module';
 import { EmployeePipe } from './pipes/employee.pipe';
 import { CustomQueryService } from '../../services/custom-query.service';
+import { FilesService } from '../files/files.service';
 
 @Module({
   imports: [MongooseModule.forFeature([
@@ -15,6 +16,6 @@ import { CustomQueryService } from '../../services/custom-query.service';
     }
   ]), UsersModule],
   controllers: [EmployeesController],
-  providers: [EmployeesService, CustomQueryService, EmployeePipe]
+  providers: [EmployeesService, FilesService, CustomQueryService, EmployeePipe]
 })
 export class EmployeesModule {}

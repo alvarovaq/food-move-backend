@@ -24,6 +24,7 @@ async function bootstrap() {
     .addTag('routines')
     .addTag('foods')
     .addTag('moves')
+    .addTag('files')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('documentation', app, document);

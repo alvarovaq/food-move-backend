@@ -20,6 +20,9 @@ export class Employee {
   @Prop({type: Boolean, default: false})
   admin: boolean;
 
+  @Prop({type: String})
+  profile_image: string;
+
 }
 
 export const EmployeeSchema = SchemaFactory.createForClass(Employee);
