@@ -54,7 +54,7 @@ export class EmployeesController {
     return await this.employeesService.upload(id, file);
   }
 
-  @Get('remove-profile-image/:id')
+  @Delete('remove-profile-image/:id')
   async removeProfileImage (@Param('id') id: string) {
     return await this.employeesService.removeProfileImage(id);
   } 

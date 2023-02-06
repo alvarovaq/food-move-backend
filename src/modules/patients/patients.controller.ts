@@ -55,7 +55,7 @@ export class PatientsController {
     return await this.patientsService.upload(id, file);
   }
 
-  @Get('remove-profile-image/:id')
+  @Delete('remove-profile-image/:id')
   async removeProfileImage (@Param('id') id: string) {
     return await this.patientsService.removeProfileImage(id);
   } 
