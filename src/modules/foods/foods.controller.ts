@@ -5,6 +5,7 @@ import { UpdateFoodDto } from './dto/update-food.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindFoodDto } from './dto/find-food.dto';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { DateRangeDto } from 'src/shared/dto/date-range.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -42,4 +43,10 @@ export class FoodsController {
   async remove(@Param('id') id: string) {
     return await this.foodsService.remove(id);
   }
+
+  @Post('findByPatient/:id')
+  async findByPatient (@Param('id') id: string, @Body() dateRangeDto: DateRangeDto) {
+    return await this.foodsService.findByPatient(id, dateRangeDto);
+  }
+
 }

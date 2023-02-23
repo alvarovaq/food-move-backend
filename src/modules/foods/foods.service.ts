@@ -5,6 +5,7 @@ import { CreateFoodDto } from './dto/create-food.dto';
 import { FindFoodDto } from './dto/find-food.dto';
 import { UpdateFoodDto } from './dto/update-food.dto';
 import { FoodDocument } from './schemas/food.schemas';
+import { DateRangeDto } from '../../shared/dto/date-range.dto';
 
 @Injectable()
 export class FoodsService {
@@ -49,5 +50,16 @@ export class FoodsService {
     foods.forEach(async (food) => {
       await this.foodModel.findByIdAndRemove(food._id);
     });
+  }
+
+  async findByPatient (idPatient: string, dateRangeDto: DateRangeDto) {
+    const foods = await this.foodModel.find({
+      patient: idPatient,
+      date: {
+        $gte: dateRangeDto.startDate,
+        $lte: dateRangeDto.endDate
+      }
+    });
+    return foods;
   }
 }
