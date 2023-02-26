@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsArray, IsBoolean, IsDate, IsEnum, IsNotEmpty, IsOptional, IsSemVer, IsString, MaxLength } from "class-validator";
 import { IsObjectId } from "class-validator-mongo-object-id";
+import { Rating } from "src/shared/enums/rating";
 export class CreateMoveDto {
     @ApiProperty()
     @IsObjectId()
@@ -40,4 +41,9 @@ export class CreateMoveDto {
     @IsBoolean()
     @IsOptional()
     done: boolean;
+
+    @ApiProperty({enum: Rating})
+    @IsEnum(Rating)
+    @IsOptional()
+    rating: Rating;
 }

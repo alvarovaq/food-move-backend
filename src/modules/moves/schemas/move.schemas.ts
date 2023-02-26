@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
+import { Rating } from 'src/shared/enums/rating';
 
 export type MoveDocument = Move & Document;
 
@@ -26,6 +27,9 @@ export class Move {
 
   @Prop({type: Boolean, default: false})
   done: boolean;
+
+  @Prop({type: String, enum: Rating})
+  rating: Rating;
 }
 
 export const MoveSchema = SchemaFactory.createForClass(Move);

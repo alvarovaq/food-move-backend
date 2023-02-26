@@ -3,6 +3,7 @@ import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { Mean } from 'src/shared/enums/mean';
 import { Dish } from 'src/shared/enums/dish';
+import { Rating } from '../../../shared/enums/rating';
 
 export type FoodDocument = Food & Document;
 
@@ -40,6 +41,9 @@ export class Food {
     type: [{name:{type: String, required: true}, quantity:{type: Number}, unit: {type: String}}]
   })
   ingredients: {name: string; quantity: number; unit: string}[];
+
+  @Prop({type: String, enum: Rating})
+  rating: Rating;
 
 }
 

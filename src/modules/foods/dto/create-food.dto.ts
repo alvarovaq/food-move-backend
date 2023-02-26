@@ -4,6 +4,7 @@ import { IsArray, IsBoolean, IsDate, IsEnum, IsNotEmpty, IsNumber, IsString, Max
 import { IsObjectId } from "class-validator-mongo-object-id";
 import { Dish } from "src/shared/enums/dish";
 import { Mean } from "src/shared/enums/mean";
+import { Rating } from '../../../shared/enums/rating';
 
 class Ingredient {
     @ApiProperty()
@@ -73,4 +74,9 @@ export class CreateFoodDto {
     @ValidateNested({each: true})
     @Type(() => Ingredient)
     ingredients: Ingredient[];
+
+    @ApiProperty({enum: Rating})
+    @IsEnum(Rating)
+    @IsOptional()
+    rating: Rating;
 }
