@@ -49,4 +49,9 @@ export class FoodsController {
     return await this.foodsService.findByPatient(id, dateRangeDto);
   }
 
+  @Post('findIngredients/:id')
+  async findIngredients (@Param('id') id: string, @Body() dateRangeDto: DateRangeDto) {
+    return await this.foodsService.findIngredients(id, dateRangeDto);
+  }
+
 }

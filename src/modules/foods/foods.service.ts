@@ -64,4 +64,21 @@ export class FoodsService {
     return foods;
   }
 
+  async findIngredients (idPatient: string, dateRangeDto: DateRangeDto) {
+    const foods = await this.findByPatient(idPatient, dateRangeDto);
+    let ingredients = [];
+    foods.forEach((food) => {
+      ingredients = [...ingredients, ...food.ingredients.map((ingredient) => {
+        return {
+          title: food.title,
+          food: food._id,
+          name: ingredient.name,
+          quantity: ingredient.quantity,
+          unit: ingredient.unit
+        };
+      })]
+    });
+    return ingredients;
+  }
+
 }
