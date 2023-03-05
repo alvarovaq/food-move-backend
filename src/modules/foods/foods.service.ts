@@ -56,10 +56,12 @@ export class FoodsService {
     const foods = await this.foodModel.find({
       patient: idPatient,
       date: {
-        $gte: dateRangeDto.startDate,
+        $gte: new Date(dateRangeDto.startDate.setDate(dateRangeDto.startDate.getDate() - 1)),
         $lte: dateRangeDto.endDate
       }
     });
+    console.log(foods);
     return foods;
   }
+
 }
