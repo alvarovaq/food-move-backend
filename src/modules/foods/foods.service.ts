@@ -56,7 +56,7 @@ export class FoodsService {
     const foods = await this.foodModel.find({
       patient: idPatient,
       date: {
-        $gte: new Date(dateRangeDto.startDate.setDate(dateRangeDto.startDate.getDate() - 1)),
+        $gte: dateRangeDto.startDate,
         $lte: dateRangeDto.endDate
       }
     });
