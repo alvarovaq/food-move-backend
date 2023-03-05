@@ -72,6 +72,7 @@ export class FoodsService {
         return {
           title: food.title,
           food: food._id,
+          date: food.date,
           name: ingredient.name,
           quantity: ingredient.quantity,
           unit: ingredient.unit
