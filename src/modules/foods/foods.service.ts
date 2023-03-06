@@ -75,11 +75,21 @@ export class FoodsService {
           date: food.date,
           name: ingredient.name,
           quantity: ingredient.quantity,
-          unit: ingredient.unit
+          unit: ingredient.unit,
+          isChecked: ingredient.isChecked ? ingredient.isChecked : false
         };
       })]
     });
     return ingredients;
+  }
+
+  async setCheckedIngredient (idFood: string, nameIngredient: string, isChecked: boolean, change: boolean = false) {
+    const food = await this.findOne(idFood);
+    const ingredients = food.ingredients.map((ingredient) => {
+      if (ingredient.name == nameIngredient) ingredient.isChecked = change ? !ingredient.isChecked : isChecked;
+      return ingredient;
+    });
+    return await this.update(idFood, {ingredients});
   }
 
 }

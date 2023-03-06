@@ -38,9 +38,9 @@ export class Food {
   done: boolean;
 
   @Prop({
-    type: [{name:{type: String, required: true}, quantity:{type: Number}, unit: {type: String}}]
+    type: [{name:{type: String, required: true}, quantity:{type: Number}, unit: {type: String}, isChecked: {type: Boolean, default: false}}]
   })
-  ingredients: {name: string; quantity: number; unit: string}[];
+  ingredients: {name: string; quantity: number; unit: string, isChecked: boolean}[];
 
   @Prop({type: String, enum: Rating})
   rating: Rating;

@@ -21,6 +21,11 @@ class Ingredient {
     @IsString()
     @IsOptional()
     unit: string;
+
+    @ApiProperty()
+    @IsBoolean()
+    @IsOptional()
+    isChecked: boolean;
 }
 
 export class CreateFoodDto {

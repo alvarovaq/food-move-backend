@@ -54,4 +54,9 @@ export class FoodsController {
     return await this.foodsService.findIngredients(id, dateRangeDto);
   }
 
+  @Get('checkIngredient/:id/:name')
+  async checkIngredient (@Param('id') id: string, @Param('name') name: string) {
+    return await this.foodsService.setCheckedIngredient(id, name, true, true);
+  }
+
 }
