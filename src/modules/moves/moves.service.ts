@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { DateRangeDto } from 'src/shared/dto/date-range.dto';
 import { CreateMoveDto } from './dto/create-move.dto';
 import { FindMoveDto } from './dto/find-move.dto';
 import { UpdateMoveDto } from './dto/update-move.dto';
@@ -29,6 +30,17 @@ export class MovesService {
   async find (findMoveDto: FindMoveDto) {
     const moves = await this.moveModel.find(findMoveDto);
     return moves;
+  }
+
+  async findByPatient (idPatient: string, dateRangeDto: DateRangeDto) {
+    const foods = await this.moveModel.find({
+      patient: idPatient,
+      date: {
+        $gte: dateRangeDto.startDate,
+        $lte: dateRangeDto.endDate
+      }
+    });
+    return foods;
   }
 
   async update(id: string, updateMoveDto: UpdateMoveDto) {

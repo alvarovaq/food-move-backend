@@ -60,7 +60,6 @@ export class FoodsService {
         $lte: dateRangeDto.endDate
       }
     });
-    console.log(foods);
     return foods;
   }
 
@@ -83,7 +82,7 @@ export class FoodsService {
     return ingredients;
   }
 
-  async setCheckedIngredient (idFood: string, nameIngredient: string, isChecked: boolean, change: boolean = false) {
+  async setCheckIngredient (idFood: string, nameIngredient: string, isChecked: boolean, change: boolean = false) {
     const food = await this.findOne(idFood);
     const ingredients = food.ingredients.map((ingredient) => {
       if (ingredient.name == nameIngredient) ingredient.isChecked = change ? !ingredient.isChecked : isChecked;

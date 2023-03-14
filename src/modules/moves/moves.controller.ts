@@ -5,6 +5,7 @@ import { UpdateMoveDto } from './dto/update-move.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindMoveDto } from './dto/find-move.dto';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { DateRangeDto } from 'src/shared/dto/date-range.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -31,6 +32,11 @@ export class MovesController {
   @Post('find')
   async find (@Body() findMoveDto: FindMoveDto) {
     return await this.movesService.find(findMoveDto);
+  }
+
+  @Post('findByPatient/:id')
+  async findByPatient (@Param('id') id: string, @Body() dateRangeDto: DateRangeDto) {
+    return await this.movesService.findByPatient(id, dateRangeDto);
   }
 
   @Patch('update/:id')
