@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsDate, IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { IsDate, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
 export class CreatePatientDto {
     @ApiProperty()
@@ -29,8 +29,8 @@ export class CreatePatientDto {
     password: string;
 
     @ApiProperty()
-    @IsString()
     @IsOptional()
+    @IsString()
     phone: string;
 
     @ApiProperty()
@@ -38,4 +38,9 @@ export class CreatePatientDto {
     @Type(() => Date)
     @IsOptional()
     birth: Date;
+
+    @ApiProperty()
+    @IsNumber()
+    @IsOptional()
+    height: number;
 }

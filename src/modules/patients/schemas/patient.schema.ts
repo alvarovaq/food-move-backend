@@ -20,6 +20,9 @@ export class Patient {
   @Prop({type: Date})
   birth: Date;
 
+  @Prop({type: Number})
+  height: number;
+
   @Prop({type: String})
   profile_image: string;
 }
