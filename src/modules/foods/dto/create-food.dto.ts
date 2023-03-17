@@ -42,7 +42,7 @@ export class CreateFoodDto {
 
     @ApiProperty()
     @IsString()
-    @MaxLength(255, {message: 'Descripción no valido, demasiado largo'})
+    @MaxLength(155, {message: 'Descripción no valida, demasiado largo'})
     @IsOptional()
     description: string;
     
@@ -61,6 +61,7 @@ export class CreateFoodDto {
 
     @ApiProperty()
     @IsString()
+    @MaxLength(155, {message: 'Comentario no valido, demasiado largo'})
     @IsOptional()
     comments: string;
 

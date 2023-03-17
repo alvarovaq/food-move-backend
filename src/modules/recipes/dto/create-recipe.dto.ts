@@ -32,7 +32,7 @@ export class CreateRecipeDto {
 
     @ApiProperty()
     @IsString()
-    @MaxLength(255, {message: 'Descripción no valido, demasiado largo'})
+    @MaxLength(155, {message: 'Descripción no valido, demasiado largo'})
     @IsOptional()
     description: string;
     

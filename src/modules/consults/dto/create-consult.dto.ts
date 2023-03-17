@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsObjectId } from "class-validator-mongo-object-id";
-import { IsDate, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsDate, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength } from "class-validator";
 
 export class CreateConsultDto {
     @ApiProperty()
@@ -56,6 +56,7 @@ export class CreateConsultDto {
     
     @ApiProperty()
     @IsString()
+    @MaxLength(155, {message: 'Comentario no valido, demasiado largo'})
     @IsOptional()
     comments: string;
     
