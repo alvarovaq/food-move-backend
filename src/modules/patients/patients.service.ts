@@ -44,7 +44,7 @@ export class PatientsService {
   async create(createPatientDto: CreatePatientDto) {
     const {phone, password} = createPatientDto;
     const findPatient = await this.patientModel.findOne({phone});
-    if (findPatient) throw new NotFoundException('Ya existe un empleado con ese email');
+    if (findPatient) throw new NotFoundException('Ya existe un paciente con ese teléfono');
     const new_password = await hash(password, 10);
     const patient = {...createPatientDto, password: new_password};
     const createdPatient = await this.patientModel.create(patient);

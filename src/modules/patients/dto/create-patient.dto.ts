@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsDate, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { IsObjectId } from "class-validator-mongo-object-id";
 
 export class CreatePatientDto {
     @ApiProperty()
@@ -43,4 +44,9 @@ export class CreatePatientDto {
     @IsNumber()
     @IsOptional()
     height: number;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsObjectId()
+    employee: string;
 }
