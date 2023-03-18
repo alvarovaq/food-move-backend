@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EmployeesModule } from './modules/employees/employees.module';
-import { UsersModule } from './modules/users/users.module';
 import { PatientsModule } from './modules/patients/patients.module';
 import { ConsultsModule } from './modules/consults/consults.module';
 import { RecipesModule } from './modules/recipes/recipes.module';
@@ -18,7 +17,7 @@ import { FilesModule } from './modules/files/files.module';
 @Module({
   imports: [MongooseModule.forRoot('mongodb+srv://7alvaq7:a1b2c3d4@cluster0.t7lmmdf.mongodb.net/?retryWrites=true&w=majority', {
     useNewUrlParser: true
-  }), EmployeesModule, UsersModule, PatientsModule, ConsultsModule, RecipesModule, RoutinesModule, FoodsModule, MovesModule, AuthModule, FilesModule],
+  }), EmployeesModule, PatientsModule, ConsultsModule, RecipesModule, RoutinesModule, FoodsModule, MovesModule, AuthModule, FilesModule],
   controllers: [AppController],
   providers: [AppService, CustomQueryService, UploadsService],
 })

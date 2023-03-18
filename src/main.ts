@@ -16,7 +16,6 @@ async function bootstrap() {
     .setDescription('Documentation of the api')
     .setVersion('1.0')
     .addTag('auth')
-    .addTag('users')
     .addTag('employees')
     .addTag('patients')
     .addTag('consults')

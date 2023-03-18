@@ -11,10 +11,10 @@ export class Patient {
   @Prop({type: String})
   surname: string;
 
-  @Prop({type: String, unique: true, required: true})
+  @Prop({type: String})
   email: string;
 
-  @Prop({type: String})
+  @Prop({type: String, unique: true, required: true})
   phone: string;
 
   @Prop({type: Date})
@@ -25,6 +25,9 @@ export class Patient {
 
   @Prop({type: String})
   profile_image: string;
+
+  @Prop({type: String, required: true})
+  password: string;
 }
 
 export const PatientSchema = SchemaFactory.createForClass(Patient);
