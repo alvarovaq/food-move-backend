@@ -16,7 +16,7 @@ export class CreatePatientDto {
     surname: string;
 
     @ApiProperty()
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     @IsEmail()
     email: string;
@@ -29,7 +29,7 @@ export class CreatePatientDto {
     password: string;
 
     @ApiProperty()
-    @IsOptional()
+    @IsNotEmpty()
     @IsString()
     phone: string;
 
