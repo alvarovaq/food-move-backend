@@ -46,7 +46,7 @@ export class CreateFoodDto {
     @IsOptional()
     description: string;
     
-    @ApiProperty({enum: Mean, default: Mean.Comida})
+    @ApiProperty({enum: Mean, default: Mean.Almuerzo})
     @IsEnum(Mean)
     mean: Mean;
 

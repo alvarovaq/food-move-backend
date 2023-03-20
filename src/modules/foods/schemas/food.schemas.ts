@@ -19,7 +19,7 @@ export class Food {
   @Prop({type: String})
   description: string;
 
-  @Prop({type: String, enum: Mean, default: Mean.Comida})
+  @Prop({type: String, enum: Mean, default: Mean.Almuerzo})
   mean: Mean;
 
   @Prop({type: String, enum: Dish, default: Dish.Primero})
