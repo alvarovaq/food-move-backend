@@ -3,6 +3,7 @@ import { WeeklyDietService } from './weekly-diet.service';
 import { WeeklyDietController } from './weekly-diet.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { WeeklyDietSchema } from './schemas/weekly-diet.schemas';
+import { CustomQueryService } from 'src/services/custom-query.service';
 
 @Module({
   imports: [
@@ -14,6 +15,6 @@ import { WeeklyDietSchema } from './schemas/weekly-diet.schemas';
     ])
   ],
   controllers: [WeeklyDietController],
-  providers: [WeeklyDietService]
+  providers: [WeeklyDietService, CustomQueryService]
 })
 export class WeeklyDietModule {}

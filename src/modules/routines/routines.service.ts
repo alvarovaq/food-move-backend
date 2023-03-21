@@ -2,9 +2,9 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CustomQueryService } from 'src/services/custom-query.service';
-import { QueryPatientDto } from '../patients/dto/query-patient.dto';
 import { CreateRoutineDto } from './dto/create-routine.dto';
 import { FilterRoutineDto } from './dto/filter-routine.dto';
+import { QueryRoutineDto } from './dto/query-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
 import { RoutineDocument } from './schemas/routine.schemas';
 
@@ -28,7 +28,7 @@ export class RoutinesService {
     return routine;
   }
 
-  async filter (queryRoutineDto: QueryPatientDto) {
+  async filter (queryRoutineDto: QueryRoutineDto) {
     return await this.customQueryService.filter(queryRoutineDto, this.routineModel);
   }
 
