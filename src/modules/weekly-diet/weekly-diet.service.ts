@@ -36,13 +36,13 @@ export class WeeklyDietService {
     return weeklyDiet;
   }
 
-  async update(id: number, updateWeeklyDietDto: UpdateWeeklyDietDto) {
+  async update(id: string, updateWeeklyDietDto: UpdateWeeklyDietDto) {
     const updatedWeeklyDiet = await this.weeklyDietModel.findByIdAndUpdate(id, updateWeeklyDietDto, {new: true});
     if (!updatedWeeklyDiet) throw new NotFoundException('No se ha encontrado la dieta semanal');
     return updatedWeeklyDiet;
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const deletedWeeklyDiet = await this.weeklyDietModel.findByIdAndDelete(id);
     if (!deletedWeeklyDiet) throw new NotFoundException('No se ha encontrado la dieta semanal');
     return deletedWeeklyDiet;

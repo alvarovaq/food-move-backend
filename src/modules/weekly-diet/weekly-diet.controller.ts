@@ -36,11 +36,11 @@ export class WeeklyDietController {
 
   @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateWeeklyDietDto: UpdateWeeklyDietDto) {
-    return this.weeklyDietService.update(+id, updateWeeklyDietDto);
+    return this.weeklyDietService.update(id, updateWeeklyDietDto);
   }
 
   @Delete('remove/:id')
   remove(@Param('id') id: string) {
-    return this.weeklyDietService.remove(+id);
+    return this.weeklyDietService.remove(id);
   }
 }
