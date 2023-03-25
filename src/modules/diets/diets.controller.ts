@@ -6,6 +6,9 @@ import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FilterDietDto } from './dto/filter-diet.dto';
 import { QueryDietDto } from './dto/query-diet.dto';
+import { DayOfWeek } from 'src/shared/enums/day-of-week';
+import { CreateRecipeDto } from '../recipes/dto/create-recipe.dto';
+import { UpdateRecipeDto } from '../recipes/dto/update-recipe.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -30,17 +33,37 @@ export class DietsController {
   }
 
   @Post('create')
-  create(@Body() createDietDto: CreateDietDto) {
-    return this.dietsService.create(createDietDto);
+  async create(@Body() createDietDto: CreateDietDto) {
+    return await this.dietsService.create(createDietDto);
   }
 
   @Patch('update/:id')
-  update(@Param('id') id: string, @Body() updateDietDto: UpdateDietDto) {
-    return this.dietsService.update(id, updateDietDto);
+  async update(@Param('id') id: string, @Body() updateDietDto: UpdateDietDto) {
+    return await this.dietsService.update(id, updateDietDto);
   }
 
   @Delete('remove/:id')
-  remove(@Param('id') id: string) {
-    return this.dietsService.remove(id);
+  async remove(@Param('id') id: string) {
+    return await this.dietsService.remove(id);
+  }
+
+  @Get('getRecipe/:dietId/:day/:recipeId')
+  async getRecipe (@Param('dietId') dietId: string, @Param('day') day: DayOfWeek, @Param('recipeId') recipeId: string) {
+    return await this.dietsService.getRecipe(dietId, day, recipeId);
+  }
+
+  @Post('addRecipe/:dietId/:day')
+  async addRecipe(@Param('dietId') dietId: string, @Param('day') day: DayOfWeek, @Body() createRecipeDto: CreateRecipeDto) {
+    return await this.dietsService.addRecipe(dietId, day, createRecipeDto);
+  }
+
+  @Patch('updateRecipe/:dietId/:day/:recipeId')
+  async updateRecipe(@Param('dietId') dietId: string, @Param('day') day: DayOfWeek, @Param('recipeId') recipeId: string, @Body() updateRecipeDto: UpdateRecipeDto) {
+    return await this.dietsService.updateRecipe(dietId, day, recipeId, updateRecipeDto);
+  }
+
+  @Delete('removeRecipe/:dietId/:day/:recipeId')
+  async removeRecipe (@Param('dietId') dietId: string, @Param('day') day: DayOfWeek, @Param('recipeId') recipeId: string) {
+    return await this.dietsService.removeRecipe(dietId, day, recipeId); 
   }
 }

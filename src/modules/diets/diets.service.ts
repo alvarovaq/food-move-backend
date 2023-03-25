@@ -2,11 +2,14 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CustomQueryService } from 'src/services/custom-query.service';
+import { DayOfWeek } from 'src/shared/enums/day-of-week';
+import { CreateRecipeDto } from '../recipes/dto/create-recipe.dto';
 import { CreateDietDto } from './dto/create-diet.dto';
 import { FilterDietDto } from './dto/filter-diet.dto';
 import { QueryDietDto } from './dto/query-diet.dto';
 import { UpdateDietDto } from './dto/update-diet.dto';
 import { DietDocument } from './schemas/diet.schemas';
+import { UpdateRecipeDto } from '../recipes/dto/update-recipe.dto';
 
 @Injectable()
 export class DietsService {
@@ -46,5 +49,78 @@ export class DietsService {
     const deletedDiet = await this.dietsModel.findByIdAndDelete(id);
     if (!deletedDiet) throw new NotFoundException('No se ha encontrado la dieta');
     return deletedDiet;
+  }
+
+  getDayItems (day: DayOfWeek, diet: any) {
+    switch(day) {
+      case DayOfWeek.Lunes: return diet.monday;
+      case DayOfWeek.Martes: return diet.tuesday;
+      case DayOfWeek.Miercoles: return diet.wednesday;
+      case DayOfWeek.Jueves: return diet.thursday;
+      case DayOfWeek.Viernes: return diet.friday;
+      case DayOfWeek.Sabado: return diet.saturday;
+      case DayOfWeek.Domingo: return diet.sunday;
+      default: return [];
+    }
+  }
+
+  getUpdateDayItems (day: DayOfWeek, items: any) {
+    switch(day) {
+      case DayOfWeek.Lunes: return {monday: items};
+      case DayOfWeek.Martes: return {tuesday: items};
+      case DayOfWeek.Miercoles: return {wednesday: items};
+      case DayOfWeek.Jueves: return {thursday: items};
+      case DayOfWeek.Viernes: return {friday: items};
+      case DayOfWeek.Sabado: return {saturday: items};
+      case DayOfWeek.Domingo: return {sunday: items};
+      default: return {};
+    }
+  }
+
+  async getRecipe (dietId: string, day: DayOfWeek, recipeId: string) {
+    const diet = await this.dietsModel.findById(dietId);
+    if (!diet) throw new NotFoundException('No se ha encontrado la dieta');
+    const dayItems = this.getDayItems(day, diet);
+    const index = dayItems.findIndex((recipe) => recipe._id == recipeId);
+    if (index == -1) throw new NotFoundException("No se ha encontrado la receta");
+    return dayItems[index];
+
+  }
+
+  async addRecipe (dietId: string, day: DayOfWeek, recipe: CreateRecipeDto) {
+    const diet = await this.dietsModel.findById(dietId);
+    if (!diet) throw new NotFoundException('No se ha encontrado la dieta');
+    const dayItems = this.getDayItems(day, diet);
+    dayItems.push(recipe);
+    const update = this.getUpdateDayItems(day, dayItems);
+    return await this.dietsModel.findByIdAndUpdate(dietId, update, {new: true});
+  }
+
+  async updateRecipe (dietId: string, day: DayOfWeek, recipeId: string, updateRecipe: UpdateRecipeDto) {
+    const diet = await this.dietsModel.findById(dietId);
+    if (!diet) throw new NotFoundException('No se ha encontrado la dieta');
+    const dayItems = this.getDayItems(day, diet);
+    const index = dayItems.findIndex((recipe) => recipe._id == recipeId);
+    if (index == -1) throw new NotFoundException("No se ha encontrado la receta");
+    dayItems[index] = {
+      ...dayItems[index],
+      ...updateRecipe
+    };
+    const update = this.getUpdateDayItems(day, dayItems);
+    return await this.dietsModel.findByIdAndUpdate(dietId, update, {new: true});
+  }
+
+  async removeRecipe (dietId: string, day: DayOfWeek, recipeId: string) {
+    const diet = await this.dietsModel.findById(dietId);
+    if (!diet) throw new NotFoundException('No se ha encontrado la dieta');
+    const dayItems = this.getDayItems(day, diet);
+    const index = dayItems.findIndex((recipe) => recipe._id == recipeId);
+    if (index !== -1) {
+      dayItems.splice(index, 1);
+      const update = this.getUpdateDayItems(day, dayItems);
+      return await this.dietsModel.findByIdAndUpdate(dietId, update, {new: true});
+    } else {
+      return diet;
+    }
   }
 }
