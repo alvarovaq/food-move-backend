@@ -23,7 +23,7 @@ async function bootstrap() {
     .addTag('routines')
     .addTag('foods')
     .addTag('moves')
-    .addTag('weekly-diet')
+    .addTag('diets')
     .addTag('files')
     .build();
   const document = SwaggerModule.createDocument(app, config);

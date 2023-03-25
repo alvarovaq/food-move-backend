@@ -2,14 +2,14 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsOptional, ValidateNested } from "class-validator";
 import { CustomQueryDto } from "src/shared/dto/custom-query.dto";
-import { FilterWeeklyDietDto } from './filter-weekly-diet.dto';
+import { FilterDietDto } from './filter-diet.dto';
 
-export class QueryWeeklyDietDto extends CustomQueryDto {
+export class QueryDietDto extends CustomQueryDto {
 
     @ApiProperty()
-    @Type(() => FilterWeeklyDietDto)
+    @Type(() => FilterDietDto)
     @ValidateNested({each: true})
     @IsOptional()
-    filter: FilterWeeklyDietDto;
+    filter: FilterDietDto;
 
 }

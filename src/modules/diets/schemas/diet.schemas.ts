@@ -1,12 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { Recipe, RecipeSchema } from 'src/modules/recipes/schemas/recipe.schemas';
-import { RecipeDocument } from '../../recipes/schemas/recipe.schemas';
 
-export type WeeklyDietDocument = WeeklyDiet & Document;
+export type DietDocument = Diet & Document;
 
 @Schema()
-export class WeeklyDiet {
+export class Diet {
 
   @Prop({type: String, required: true})
   title: string;
@@ -36,4 +35,4 @@ export class WeeklyDiet {
   sunday: Recipe[];
 }
 
-export const WeeklyDietSchema = SchemaFactory.createForClass(WeeklyDiet);
+export const DietSchema = SchemaFactory.createForClass(Diet);

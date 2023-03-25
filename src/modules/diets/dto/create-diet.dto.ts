@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString, MaxLength, IsOptional } from 'class-validator';
 import { CreateRecipeDto } from "src/modules/recipes/dto/create-recipe.dto";
 
-export class CreateWeeklyDietDto {
+export class CreateDietDto {
 
     @ApiProperty()
     @IsNotEmpty()
