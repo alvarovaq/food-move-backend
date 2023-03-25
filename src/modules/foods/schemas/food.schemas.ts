@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
-import { Mean } from 'src/shared/enums/mean';
+import { Meal } from 'src/shared/enums/meal';
 import { Dish } from 'src/shared/enums/dish';
 import { Rating } from '../../../shared/enums/rating';
 
@@ -19,8 +19,8 @@ export class Food {
   @Prop({type: String})
   description: string;
 
-  @Prop({type: String, enum: Mean, default: Mean.Almuerzo})
-  mean: Mean;
+  @Prop({type: String, enum: Meal, default: Meal.Almuerzo})
+  meal: Meal;
 
   @Prop({type: String, enum: Dish, default: Dish.Primero})
   dish: Dish;

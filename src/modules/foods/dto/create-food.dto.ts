@@ -3,7 +3,7 @@ import { Type } from "class-transformer";
 import { IsArray, IsBoolean, IsDate, IsEnum, IsNotEmpty, IsNumber, IsString, MaxLength, ValidateNested, IsOptional } from 'class-validator';
 import { IsObjectId } from "class-validator-mongo-object-id";
 import { Dish } from "src/shared/enums/dish";
-import { Mean } from "src/shared/enums/mean";
+import { Meal } from "src/shared/enums/meal";
 import { Rating } from '../../../shared/enums/rating';
 
 class Ingredient {
@@ -46,9 +46,9 @@ export class CreateFoodDto {
     @IsOptional()
     description: string;
     
-    @ApiProperty({enum: Mean, default: Mean.Almuerzo})
-    @IsEnum(Mean)
-    mean: Mean;
+    @ApiProperty({enum: Meal, default: Meal.Almuerzo})
+    @IsEnum(Meal)
+    meal: Meal;
 
     @ApiProperty({enum: Dish, default: Dish.Primero})
     @IsEnum(Dish)
