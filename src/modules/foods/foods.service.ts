@@ -7,6 +7,9 @@ import { UpdateFoodDto } from './dto/update-food.dto';
 import { FoodDocument } from './schemas/food.schemas';
 import { DateRangeDto } from '../../shared/dto/date-range.dto';
 import { DietsService } from '../diets/diets.service';
+import { asyncForEach } from 'src/utils/utils';
+import { addDay, getDateRange } from 'src/utils/date-utils';
+import { DateRange } from '../../../../frontend-angular/src/app/core/interfaces/date-range';
 
 @Injectable()
 export class FoodsService {
@@ -97,10 +100,11 @@ export class FoodsService {
 
   async importDiet (dietId: string, patientId: string, date: Date) {
     const diet = await this.dietsService.findOne(dietId);
+    const range = getDateRange(date);
+    let indexDate = new Date(date);
+    let itemsDay = [];
     for (let i = 0; i < 7; i++) {
-      const cpy_date = new Date(date);
-      const indexDate = new Date(cpy_date.setDate(cpy_date.getDate() + i));
-      let itemsDay = [];
+      indexDate = addDay(range.startDate, i);
       switch(i) {
         case 0: { itemsDay = [...diet.monday]; break;}
         case 1: { itemsDay = [...diet.tuesday]; break;}
@@ -110,8 +114,7 @@ export class FoodsService {
         case 5: { itemsDay = [...diet.saturday]; break;}
         case 6: { itemsDay = [...diet.sunday]; break;}
       };
-      itemsDay.forEach(async (recipe) => {
-        const { title, description, meal, dish, links, ingredients } = recipe;
+      await asyncForEach(itemsDay, async (recipe) => {
         const food = {
           title: recipe.title,
           description: recipe.description,
@@ -125,7 +128,8 @@ export class FoodsService {
         };
         await this.create(food as CreateFoodDto);
       });
-    }
+    };
+    return await this.findByPatient(patientId, range);
   }
 
 }

@@ -61,8 +61,7 @@ export class FoodsController {
 
   @Get('importDiet/:dietId/:patientId/:date')
   async importDiet (@Param('dietId') dietId, @Param('patientId') patientId, @Param('date') date: Date) {
-    await this.foodsService.importDiet(dietId, patientId, date);
-    return true;
+    return await this.foodsService.importDiet(dietId, patientId, date);
   }
 
 }
