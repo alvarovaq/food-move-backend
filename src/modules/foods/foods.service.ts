@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateFoodDto } from './dto/create-food.dto';
@@ -6,11 +6,15 @@ import { FindFoodDto } from './dto/find-food.dto';
 import { UpdateFoodDto } from './dto/update-food.dto';
 import { FoodDocument } from './schemas/food.schemas';
 import { DateRangeDto } from '../../shared/dto/date-range.dto';
+import { DietsService } from '../diets/diets.service';
 
 @Injectable()
 export class FoodsService {
 
-  constructor (@InjectModel('foods') private readonly foodModel: Model<FoodDocument>) {}
+  constructor (
+    @InjectModel('foods') private readonly foodModel: Model<FoodDocument>,
+    @Inject(DietsService) private readonly dietsService: DietsService  
+  ) {}
 
   async create(createFoodDto: CreateFoodDto) {
     const food = await this.foodModel.create(createFoodDto);
@@ -89,6 +93,39 @@ export class FoodsService {
       return ingredient;
     });
     return await this.update(idFood, {ingredients});
+  }
+
+  async importDiet (dietId: string, patientId: string, date: Date) {
+    const diet = await this.dietsService.findOne(dietId);
+    for (let i = 0; i < 7; i++) {
+      const cpy_date = new Date(date);
+      const indexDate = new Date(cpy_date.setDate(cpy_date.getDate() + i));
+      let itemsDay = [];
+      switch(i) {
+        case 0: { itemsDay = [...diet.monday]; break;}
+        case 1: { itemsDay = [...diet.tuesday]; break;}
+        case 2: { itemsDay = [...diet.wednesday]; break;}
+        case 3: { itemsDay = [...diet.thursday]; break;}
+        case 4: { itemsDay = [...diet.friday]; break;}
+        case 5: { itemsDay = [...diet.saturday]; break;}
+        case 6: { itemsDay = [...diet.sunday]; break;}
+      };
+      itemsDay.forEach(async (recipe) => {
+        const { title, description, meal, dish, links, ingredients } = recipe;
+        const food = {
+          title: recipe.title,
+          description: recipe.description,
+          meal: recipe.meal,
+          dish: recipe.dish,
+          links: recipe.links,
+          ingredients: recipe.ingredients,
+          patient: patientId,
+          comments: '',
+          date: indexDate
+        };
+        await this.create(food as CreateFoodDto);
+      });
+    }
   }
 
 }

@@ -15,6 +15,7 @@ import { CustomQueryService } from 'src/services/custom-query.service';
     ])
   ],
   controllers: [DietsController],
-  providers: [DietsService, CustomQueryService]
+  providers: [DietsService, CustomQueryService],
+  exports: [DietsService]
 })
 export class DietsModule {}
