@@ -23,3 +23,5 @@ export const Storage = {
     fileFilter: imageFileFilter,
     limits: {fileSize: MAX_SIZE_IMAGE}
 }
+
+export const DESTINATION_ATTACHMENTS = './uploads/attachments';

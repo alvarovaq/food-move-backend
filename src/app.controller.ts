@@ -11,9 +11,4 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-
-  @Get('profile-image/:imagename')
-  getImage (@Param('imagename') imagename, @Res() res) {
-    res.sendFile(imagename, {root: DESTINATION_PROFILE_IMAGE})
-  }
 }

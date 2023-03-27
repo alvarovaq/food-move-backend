@@ -18,8 +18,8 @@ export class DietsController {
   constructor(private readonly dietsService: DietsService) {}
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.dietsService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.dietsService.findOne(id);
   }
 
   @Post('lookUp')
