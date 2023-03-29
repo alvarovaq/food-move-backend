@@ -15,4 +15,9 @@ export class FilesController {
     return res.sendFile(imagename, {root: DESTINATION_PROFILE_IMAGE})
   }
 
+  @Get('attachments')
+  async getAttachments () {
+    return 'hola';
+  }
+
 }
