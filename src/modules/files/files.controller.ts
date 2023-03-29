@@ -12,12 +12,7 @@ export class FilesController {
   @Get('profile-image/:filename?')
   async getProfileImage(@Param('filename') filename?: string, @Res() res?) {
     const imagename = await this.filesService.getProfileImage(filename);
-    return res.sendFile(imagename, {root: DESTINATION_PROFILE_IMAGE})
-  }
-
-  @Get('attachments')
-  async getAttachments () {
-    return 'hola';
+    return res.sendFile(imagename, {root: DESTINATION_PROFILE_IMAGE});
   }
 
 }

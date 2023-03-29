@@ -1,26 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAttachmentDto } from './dto/create-attachment.dto';
 import { UpdateAttachmentDto } from './dto/update-attachment.dto';
+import * as fs from 'fs';
+import { DESTINATION_ATTACHMENTS } from '../../constants/uploads.constants';
+import { join } from 'path';
 
 @Injectable()
 export class AttachmentsService {
-  create(createAttachmentDto: CreateAttachmentDto) {
-    return 'This action adds a new attachment';
+
+  async findAll() {
+    return new Promise<string[]>((resolve, reject) => {
+      fs.readdir(DESTINATION_ATTACHMENTS, (error, files) => {
+        if (error) {
+          reject(error);
+          throw new NotFoundException(error);
+        }
+        const pdfFiles = files.filter((file) => {
+          const extension = file.split('.').pop();
+          return extension === 'pdf';
+        });
+        resolve(pdfFiles);
+      })
+    }); 
   }
 
-  findAll() {
-    return `This action returns all attachments`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} attachment`;
-  }
-
-  update(id: number, updateAttachmentDto: UpdateAttachmentDto) {
-    return `This action updates a #${id} attachment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} attachment`;
+  async deleteFile (filename: string) {
+    const filePath = join(DESTINATION_ATTACHMENTS, filename);
+    return new Promise<void>((resolve, reject) => {
+      fs.unlink(filePath, (error) => {
+        if (error) {
+          reject(error);
+          throw new NotFoundException(error);
+        }
+        resolve();
+      })
+    });
   }
 }

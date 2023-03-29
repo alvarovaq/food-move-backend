@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
 import { AttachmentsService } from './attachments.service';
 import { CreateAttachmentDto } from './dto/create-attachment.dto';
 import { UpdateAttachmentDto } from './dto/update-attachment.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
+import { DESTINATION_ATTACHMENTS } from '../../constants/uploads.constants';
 
 @ApiBearerAuth()
 @ApiTags('attachments')
@@ -10,28 +12,18 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class AttachmentsController {
   constructor(private readonly attachmentsService: AttachmentsService) {}
 
-  @Post()
-  create(@Body() createAttachmentDto: CreateAttachmentDto) {
-    return this.attachmentsService.create(createAttachmentDto);
-  }
-
   @Get()
-  findAll() {
-    return this.attachmentsService.findAll();
+  async getFiles() {
+    return await this.attachmentsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.attachmentsService.findOne(+id);
+  @Get(':filename')
+  async getFile(@Param('filename') filename: string, @Res() response: Response) {
+    return response.sendFile(filename, {root: DESTINATION_ATTACHMENTS});
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAttachmentDto: UpdateAttachmentDto) {
-    return this.attachmentsService.update(+id, updateAttachmentDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.attachmentsService.remove(+id);
+  @Delete('removeFile/:filename')
+  async removeFile (@Param('filename') filename: string) {
+    return await this.attachmentsService.deleteFile(filename);
   }
 }
