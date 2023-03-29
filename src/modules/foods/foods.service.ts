@@ -9,7 +9,6 @@ import { DateRangeDto } from '../../shared/dto/date-range.dto';
 import { DietsService } from '../diets/diets.service';
 import { asyncForEach } from 'src/utils/utils';
 import { addDay, getDateRange } from 'src/utils/date-utils';
-import { DateRange } from '../../../../frontend-angular/src/app/core/interfaces/date-range';
 
 @Injectable()
 export class FoodsService {
