@@ -11,7 +11,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class AttachmentsController {
   constructor(private readonly attachmentsService: AttachmentsService) {}
 
-  @Get(':id')
+  @Get('findOne/:id')
   async findOne (@Param('id') id: string) {
     return await this.attachmentsService.findOne(id);
   }
