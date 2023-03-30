@@ -4,11 +4,18 @@ import { UpdateAttachmentDto } from './dto/update-attachment.dto';
 import * as fs from 'fs';
 import { DESTINATION_ATTACHMENTS } from '../../constants/uploads.constants';
 import { join } from 'path';
+import { InjectModel } from '@nestjs/mongoose';
+import { AttachmentDocument } from './schemas/attachment.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class AttachmentsService {
 
-  async findAll() {
+  constructor (
+    @InjectModel('attachments') private readonly attachmentModel: Model<AttachmentDocument>
+  ) {}
+
+  /*async findAll() {
     return new Promise<string[]>((resolve, reject) => {
       fs.readdir(DESTINATION_ATTACHMENTS, (error, files) => {
         if (error) {
@@ -22,18 +29,37 @@ export class AttachmentsService {
         resolve(pdfFiles);
       })
     }); 
+  }*/
+
+  async findAll () {
+    return await this.attachmentModel.find({});
   }
 
-  async deleteFile (filename: string) {
-    const filePath = join(DESTINATION_ATTACHMENTS, filename);
-    return new Promise<void>((resolve, reject) => {
+  async findOne (id: string) {
+    return await this.attachmentModel.findById(id);
+  }
+
+  async create (title: string, file: Express.Multer.File) {
+    return await this.attachmentModel.create({title, filename: file.filename});
+  }
+
+  async update (id: string, title: string) {
+    return await this.attachmentModel.findByIdAndUpdate(id, {title}, {new: true});
+  }
+
+  async remove (id: string) {
+    const attachment = await this.attachmentModel.findByIdAndDelete(id);
+    if (!attachment) throw new NotFoundException("No se ha encontrado el archivo");
+    const filePath = join(DESTINATION_ATTACHMENTS, attachment.filename);
+    await new Promise<void>((resolve, reject) => {
       fs.unlink(filePath, (error) => {
-        if (error) {
+        /*if (error) {
           reject(error);
           throw new NotFoundException(error);
-        }
+        }*/
         resolve();
       })
     });
+    return attachment;
   }
 }

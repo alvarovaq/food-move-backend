@@ -1,10 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, UseInterceptors, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
 import { AttachmentsService } from './attachments.service';
-import { CreateAttachmentDto } from './dto/create-attachment.dto';
-import { UpdateAttachmentDto } from './dto/update-attachment.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
-import { DESTINATION_ATTACHMENTS } from '../../constants/uploads.constants';
+import { AttachmentStorage, DESTINATION_ATTACHMENTS, MAX_SIZE_ATTACHMENT } from '../../constants/uploads.constants';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiBearerAuth()
 @ApiTags('attachments')
@@ -12,18 +11,34 @@ import { DESTINATION_ATTACHMENTS } from '../../constants/uploads.constants';
 export class AttachmentsController {
   constructor(private readonly attachmentsService: AttachmentsService) {}
 
-  @Get()
-  async getFiles() {
+  @Get('findOne/:id')
+  async findOne (@Param('id') id: string) {
+    return await this.attachmentsService.findOne(id);
+  }
+
+  @Get('findAll/')
+  async findAll () {
     return await this.attachmentsService.findAll();
   }
 
-  @Get(':filename')
-  async getFile(@Param('filename') filename: string, @Res() response: Response) {
-    return response.sendFile(filename, {root: DESTINATION_ATTACHMENTS});
+  @Post('create/:title')
+  @UseInterceptors(FileInterceptor('file', AttachmentStorage))
+  async create (@Param('title') title: string, @UploadedFile(new ParseFilePipe({validators: [new MaxFileSizeValidator({maxSize: MAX_SIZE_ATTACHMENT}), new FileTypeValidator({fileType: 'application/pdf'})]})) file: Express.Multer.File) {
+    return await this.attachmentsService.create(title, file);
   }
 
-  @Delete('removeFile/:filename')
-  async removeFile (@Param('filename') filename: string) {
-    return await this.attachmentsService.deleteFile(filename);
+  @Patch('update/:id/:title')
+  async update (@Param('id') id: string, @Param('title') title: string) {
+    return await this.attachmentsService.update(id, title);
+  }
+
+  @Delete('remove/:id')
+  async remove (@Param('id') id: string) {
+    return await this.attachmentsService.remove(id);
+  }
+
+  @Get('/:filename')
+  async getFile(@Param('filename') filename: string, @Res() response: Response) {
+    return response.sendFile(filename, {root: DESTINATION_ATTACHMENTS});
   }
 }

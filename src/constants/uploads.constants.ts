@@ -25,3 +25,22 @@ export const Storage = {
 }
 
 export const DESTINATION_ATTACHMENTS = './uploads/attachments';
+export const MAX_SIZE_ATTACHMENT = 1 * 1000 * 1000;
+export const attachmentFileFilter = (req, file, callback) => {
+    if (!file.originalname.match(/\.(pdf)$/)) {
+      return callback(new Error('El archivo no cumple los requisitos'), false);
+    }
+    callback(null, true);
+};
+export const AttachmentStorage = {
+    storage: diskStorage({
+        destination: DESTINATION_ATTACHMENTS,
+        filename: (req, file, cb) => {
+            const filename: string = uuidv4();
+            const extension: string = path.parse(file.originalname).ext;
+            cb(null, `${filename}${extension}`);
+        }
+    }),
+    fileFilter: attachmentFileFilter,
+    limits: {fileSize: MAX_SIZE_ATTACHMENT}
+}
