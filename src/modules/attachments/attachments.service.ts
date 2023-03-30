@@ -15,22 +15,6 @@ export class AttachmentsService {
     @InjectModel('attachments') private readonly attachmentModel: Model<AttachmentDocument>
   ) {}
 
-  /*async findAll() {
-    return new Promise<string[]>((resolve, reject) => {
-      fs.readdir(DESTINATION_ATTACHMENTS, (error, files) => {
-        if (error) {
-          reject(error);
-          throw new NotFoundException(error);
-        }
-        const pdfFiles = files.filter((file) => {
-          const extension = file.split('.').pop();
-          return extension === 'pdf';
-        });
-        resolve(pdfFiles);
-      })
-    }); 
-  }*/
-
   async findAll () {
     return await this.attachmentModel.find({});
   }
@@ -57,10 +41,7 @@ export class AttachmentsService {
     const filePath = join(DESTINATION_ATTACHMENTS, attachment.filename);
     await new Promise<void>((resolve, reject) => {
       fs.unlink(filePath, (error) => {
-        /*if (error) {
-          reject(error);
-          throw new NotFoundException(error);
-        }*/
+        if (error) {}
         resolve();
       })
     });

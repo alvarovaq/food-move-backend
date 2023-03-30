@@ -36,9 +36,4 @@ export class AttachmentsController {
   async remove (@Param('id') id: string) {
     return await this.attachmentsService.remove(id);
   }
-
-  @Get('/:filename')
-  async getFile(@Param('filename') filename: string, @Res() response: Response) {
-    return response.sendFile(filename, {root: DESTINATION_ATTACHMENTS});
-  }
 }
