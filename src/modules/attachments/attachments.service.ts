@@ -40,10 +40,14 @@ export class AttachmentsService {
   }
 
   async create (title: string, file: Express.Multer.File) {
+    const attachments = await this.attachmentModel.find({title});
+    if (attachments.length > 0) throw new NotFoundException("Ya existe un archivo con ese nombre");
     return await this.attachmentModel.create({title, filename: file.filename});
   }
 
   async update (id: string, title: string) {
+    const attachments = await (await this.attachmentModel.find({title})).filter((attachment) => !attachment._id.equals(id));
+    if (attachments.length > 0) throw new NotFoundException("Ya existe un archivo con ese nombre");
     return await this.attachmentModel.findByIdAndUpdate(id, {title}, {new: true});
   }
 
