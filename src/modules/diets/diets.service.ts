@@ -3,8 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CustomQueryService } from 'src/services/custom-query.service';
 import { DayOfWeek } from 'src/shared/enums/day-of-week';
-import { CreateRecipeDto } from '../recipes/dto/create-recipe.dto';
-import { CreateDietDto } from './dto/create-diet.dto';
+import { RecipeDto } from '../recipes/dto/recipe.dto';
+import { DietDto } from './dto/diet.dto';
 import { FilterDietDto } from './dto/filter-diet.dto';
 import { QueryDietDto } from './dto/query-diet.dto';
 import { UpdateDietDto } from './dto/update-diet.dto';
@@ -34,8 +34,8 @@ export class DietsService {
     return await this.customQueryService.filter(queryDietDto, this.dietsModel);
   }
 
-  async create(createDietDto: CreateDietDto) {
-    const diet = await this.dietsModel.create(createDietDto);
+  async create(dietDto: DietDto) {
+    const diet = await this.dietsModel.create(dietDto);
     return diet;
   }
 
@@ -87,7 +87,7 @@ export class DietsService {
 
   }
 
-  async addRecipe (dietId: string, day: DayOfWeek, recipe: CreateRecipeDto) {
+  async addRecipe (dietId: string, day: DayOfWeek, recipe: RecipeDto) {
     const diet = await this.dietsModel.findById(dietId);
     if (!diet) throw new NotFoundException('No se ha encontrado la dieta');
     const dayItems = this.getDayItems(day, diet);

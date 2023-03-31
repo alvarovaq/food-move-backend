@@ -1,10 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsArray, IsBoolean, IsDate, IsEnum, IsNotEmpty, IsNumber, IsString, MaxLength, ValidateNested, IsOptional } from 'class-validator';
-import { IsObjectId } from "class-validator-mongo-object-id";
-import { Dish } from "src/shared/enums/dish";
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, ValidateNested } from "class-validator";
+import { Dish } from "../../../shared/enums/dish";
 import { Meal } from "src/shared/enums/meal";
-import { Rating } from '../../../shared/enums/rating';
 
 class Ingredient {
     @ApiProperty()
@@ -21,18 +19,9 @@ class Ingredient {
     @IsString()
     @IsOptional()
     unit: string;
-
-    @ApiProperty()
-    @IsBoolean()
-    @IsOptional()
-    isChecked: boolean;
 }
 
-export class CreateFoodDto {
-    @ApiProperty()
-    @IsObjectId()
-    @IsNotEmpty()
-    patient: string;
+export class RecipeDto {
 
     @ApiProperty()
     @IsNotEmpty()
@@ -42,7 +31,7 @@ export class CreateFoodDto {
 
     @ApiProperty()
     @IsString()
-    @MaxLength(155, {message: 'Descripción no valida, demasiado largo'})
+    @MaxLength(155, {message: 'Descripción no valido, demasiado largo'})
     @IsOptional()
     description: string;
     
@@ -60,29 +49,7 @@ export class CreateFoodDto {
     links: string[];
 
     @ApiProperty()
-    @IsString()
-    @MaxLength(155, {message: 'Comentario no valido, demasiado largo'})
-    @IsOptional()
-    comments: string;
-
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsDate()
-    @Type(() => Date)
-    date: Date;
-
-    @ApiProperty({default: false})
-    @IsBoolean()
-    @IsOptional()
-    done: boolean;
-
-    @ApiProperty()
     @ValidateNested({each: true})
     @Type(() => Ingredient)
     ingredients: Ingredient[];
-
-    @ApiProperty({enum: Rating})
-    @IsEnum(Rating)
-    @IsOptional()
-    rating: Rating;
 }

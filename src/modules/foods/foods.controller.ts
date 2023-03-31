@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { FoodsService } from './foods.service';
-import { CreateFoodDto } from './dto/create-food.dto';
+import { FoodDto } from './dto/food.dto';
 import { UpdateFoodDto } from './dto/update-food.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindFoodDto } from './dto/find-food.dto';
@@ -15,8 +15,8 @@ export class FoodsController {
   constructor(private readonly foodsService: FoodsService) {}
 
   @Post('create')
-  async create(@Body() createFoodDto: CreateFoodDto) {
-    return await this.foodsService.create(createFoodDto);
+  async create(@Body() foodDto: FoodDto) {
+    return await this.foodsService.create(foodDto);
   }
 
   @Get('findAll')

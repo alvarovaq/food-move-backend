@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { ConsultsService } from 'src/modules/consults/consults.service';
 import { FoodsService } from 'src/modules/foods/foods.service';
 import { MovesService } from 'src/modules/moves/moves.service';
-import { CreatePatientDto } from './dto/create-patient.dto';
+import { PatientDto } from './dto/patient.dto';
 import { QueryPatientDto } from './dto/query-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 import { PatientDocument } from './schemas/patient.schema';
@@ -41,12 +41,12 @@ export class PatientsService {
     return await this.customQueryService.filter(queryPatientDto, this.patientModel);
   }
 
-  async create(createPatientDto: CreatePatientDto) {
-    const {phone, password} = createPatientDto;
+  async create(patientDto: PatientDto) {
+    const {phone, password} = patientDto;
     const findPatient = await this.patientModel.findOne({phone});
     if (findPatient) throw new NotFoundException('Ya existe un paciente con ese teléfono');
     const new_password = await hash(password, 10);
-    const patient = {...createPatientDto, password: new_password};
+    const patient = {...patientDto, password: new_password};
     const createdPatient = await this.patientModel.create(patient);
     return createdPatient;
   }

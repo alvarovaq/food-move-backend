@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, NotFoundException, UseInterceptors, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
 import { EmployeesService } from './employees.service';
-import { CreateEmployeeDto } from './dto/create-employee.dto';
+import { EmployeeDto } from './dto/employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ValidationTypes } from 'class-validator';
@@ -34,8 +34,8 @@ export class EmployeesController {
   }
 
   @Post('create')
-  async create(@Body() createEmployeeDto: CreateEmployeeDto) {
-    return await this.employeesService.create(createEmployeeDto);
+  async create(@Body() employeeDto: EmployeeDto) {
+    return await this.employeesService.create(employeeDto);
   }
   
   @Patch('update/:id')

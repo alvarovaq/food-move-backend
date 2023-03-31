@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
 
-export class CreateRoutineDto {
+export class RoutineDto {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()

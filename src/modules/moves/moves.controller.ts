@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { MovesService } from './moves.service';
-import { CreateMoveDto } from './dto/create-move.dto';
+import { MoveDto } from './dto/move.dto';
 import { UpdateMoveDto } from './dto/update-move.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindMoveDto } from './dto/find-move.dto';
@@ -15,8 +15,8 @@ export class MovesController {
   constructor(private readonly movesService: MovesService) {}
 
   @Post('create')
-  async create(@Body() createMoveDto: CreateMoveDto) {
-    return await this.movesService.create(createMoveDto);
+  async create(@Body() moveDto: MoveDto) {
+    return await this.movesService.create(moveDto);
   }
 
   @Get('findAll')

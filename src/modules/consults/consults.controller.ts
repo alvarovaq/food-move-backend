@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 import { ConsultsService } from './consults.service';
-import { CreateConsultDto } from './dto/create-consult.dto';
+import { ConsultDto } from './dto/consult.dto';
 import { FilterConsultDto } from './dto/filter-consult.dto';
 import { UpdateConsultDto } from './dto/update-consult.dto';
 import { QueryConsultDto } from './dto/query-consult.dto';
@@ -30,8 +30,8 @@ export class ConsultsController {
   }
 
   @Post('create')
-  async create(@Body() createConsultDto: CreateConsultDto) {
-    return await this.consultsService.create(createConsultDto);
+  async create(@Body() consultDto: ConsultDto) {
+    return await this.consultsService.create(consultDto);
   }
 
   @Patch('update/:id')

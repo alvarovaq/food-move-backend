@@ -2,7 +2,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CustomQueryService } from 'src/services/custom-query.service';
-import { CreateRecipeDto } from './dto/create-recipe.dto';
+import { RecipeDto } from './dto/recipe.dto';
 import { FilterRecipeDto } from './dto/filter-recipe.dto';
 import { QueryRecipeDto } from './dto/query-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
@@ -32,8 +32,8 @@ export class RecipesService {
     return await this.customQueryService.filter(queryRecipeDto, this.recipeModel);
   }
 
-  async create(createRecipeDto: CreateRecipeDto) {
-    const recipe = await this.recipeModel.create(createRecipeDto);
+  async create(recipeDto: RecipeDto) {
+    const recipe = await this.recipeModel.create(recipeDto);
     return recipe;
   }
 

@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { NotFoundError } from 'rxjs';
 import { CustomQueryService } from 'src/services/custom-query.service';
-import { CreateConsultDto } from './dto/create-consult.dto';
+import { ConsultDto } from './dto/consult.dto';
 import { FilterConsultDto } from './dto/filter-consult.dto';
 import { QueryConsultDto } from './dto/query-consult.dto';
 import { UpdateConsultDto } from './dto/update-consult.dto';
@@ -38,8 +38,8 @@ export class ConsultsService {
     return await this.customQueryService.filter(queryConsultDto, this.consultModel);
   }
 
-  async create(createConsultDto: CreateConsultDto) {
-    const consult = await this.consultModel.create(createConsultDto);
+  async create(consultDto: ConsultDto) {
+    const consult = await this.consultModel.create(consultDto);
     return consult;
   }
 

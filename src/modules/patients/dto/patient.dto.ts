@@ -1,7 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsEmail, IsString, IsBoolean, MaxLength, MinLength, IsOptional } from "class-validator";
+import { Type } from "class-transformer";
+import { IsDate, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { IsObjectId } from "class-validator-mongo-object-id";
 
-export class CreateEmployeeDto {
+export class PatientDto {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
@@ -13,18 +15,13 @@ export class CreateEmployeeDto {
     @MaxLength(255, {message: 'El apellido no es válido, es muy largo'})
     @IsOptional()
     surname: string;
-    
+
     @ApiProperty()
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     @IsEmail()
     email: string;
-    
-    @ApiProperty()
-    @IsString()
-    @IsOptional()
-    phone: string;
-    
+
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
@@ -33,7 +30,23 @@ export class CreateEmployeeDto {
     password: string;
 
     @ApiProperty()
-    @IsBoolean()
+    @IsNotEmpty()
+    @IsString()
+    phone: string;
+
+    @ApiProperty()
+    @IsDate()
+    @Type(() => Date)
     @IsOptional()
-    admin: boolean;
+    birth: Date;
+
+    @ApiProperty()
+    @IsNumber()
+    @IsOptional()
+    height: number;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsObjectId()
+    employee: string;
 }

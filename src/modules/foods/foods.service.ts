@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateFoodDto } from './dto/create-food.dto';
+import { FoodDto } from './dto/food.dto';
 import { FindFoodDto } from './dto/find-food.dto';
 import { UpdateFoodDto } from './dto/update-food.dto';
 import { FoodDocument } from './schemas/food.schemas';
@@ -18,8 +18,8 @@ export class FoodsService {
     @Inject(DietsService) private readonly dietsService: DietsService  
   ) {}
 
-  async create(createFoodDto: CreateFoodDto) {
-    const food = await this.foodModel.create(createFoodDto);
+  async create(foodDto: FoodDto) {
+    const food = await this.foodModel.create(foodDto);
     return food;
   }
 
@@ -125,7 +125,7 @@ export class FoodsService {
           comments: '',
           date: indexDate
         };
-        await this.create(food as CreateFoodDto);
+        await this.create(food as FoodDto);
       });
     };
     return await this.findByPatient(patientId, range);

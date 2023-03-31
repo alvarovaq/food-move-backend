@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateAttachmentDto } from './dto/create-attachment.dto';
+import { CreateAttachmentDto } from './dto/attachment.dto';
 import { UpdateAttachmentDto } from './dto/update-attachment.dto';
 import * as fs from 'fs';
 import { DESTINATION_ATTACHMENTS } from '../../constants/uploads.constants';

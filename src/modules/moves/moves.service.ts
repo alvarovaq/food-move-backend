@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DateRangeDto } from 'src/shared/dto/date-range.dto';
-import { CreateMoveDto } from './dto/create-move.dto';
+import { MoveDto } from './dto/move.dto';
 import { FindMoveDto } from './dto/find-move.dto';
 import { UpdateMoveDto } from './dto/update-move.dto';
 import { MoveDocument } from './schemas/move.schemas';
@@ -11,8 +11,8 @@ import { MoveDocument } from './schemas/move.schemas';
 export class MovesService {
   constructor (@InjectModel('moves') private readonly moveModel: Model<MoveDocument>) {}
 
-  async create(createMoveDto: CreateMoveDto) {
-    const move = await this.moveModel.create(createMoveDto);
+  async create(moveDto: MoveDto) {
+    const move = await this.moveModel.create(moveDto);
     return move;
   }
 

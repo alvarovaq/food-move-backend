@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { RecipesService } from './recipes.service';
-import { CreateRecipeDto } from './dto/create-recipe.dto';
+import { RecipeDto } from './dto/recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { FilterRecipeDto } from './dto/filter-recipe.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -30,8 +30,8 @@ export class RecipesController {
   }
 
   @Post('create')
-  async create(@Body() createRecipeDto: CreateRecipeDto) {
-    return await this.recipesService.create(createRecipeDto);
+  async create(@Body() recipeDto: RecipeDto) {
+    return await this.recipesService.create(recipeDto);
   }
 
   @Patch('update/:id')

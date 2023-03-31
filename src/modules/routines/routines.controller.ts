@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { RoutinesService } from './routines.service';
-import { CreateRoutineDto } from './dto/create-routine.dto';
+import { RoutineDto } from './dto/routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FilterRoutineDto } from './dto/filter-routine.dto';
@@ -30,8 +30,8 @@ export class RoutinesController {
   }
 
   @Post('create')
-  async create(@Body() createRoutineDto: CreateRoutineDto) {
-    return await this.routinesService.create(createRoutineDto);
+  async create(@Body() routineDto: RoutineDto) {
+    return await this.routinesService.create(routineDto);
   }
 
   @Patch('update/:id')

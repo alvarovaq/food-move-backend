@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateEmployeeDto } from './dto/create-employee.dto';
+import { EmployeeDto } from './dto/employee.dto';
 import { FilterEmployeeDto } from './dto/filter-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { EmployeeDocument } from './schema/employee.schema';
@@ -35,12 +35,12 @@ export class EmployeesService {
     return await this.customQueryService.filter(queryEmployeeDto, this.employeeModel);
   }
 
-  async create(createEmployeeDto: CreateEmployeeDto) {
-    const {email, password} = createEmployeeDto;
+  async create(employeeDto: EmployeeDto) {
+    const {email, password} = employeeDto;
     const findEmployee = await this.employeeModel.findOne({email});
     if (findEmployee) throw new NotFoundException('Ya existe un empleado con ese email');
     const new_password = await hash(password, 10);
-    const employee = {...createEmployeeDto, password: new_password};
+    const employee = {...employeeDto, password: new_password};
     const createdEmployee = await this.employeeModel.create(employee);
     return createdEmployee;
   }

@@ -3,7 +3,7 @@ import { Type } from "class-transformer";
 import { IsObjectId } from "class-validator-mongo-object-id";
 import { IsDate, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength } from "class-validator";
 
-export class CreateConsultDto {
+export class ConsultDto {
     @ApiProperty()
     @IsNotEmpty()
     @IsObjectId()

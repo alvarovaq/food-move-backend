@@ -1,9 +1,9 @@
 import { ApiProperty, OmitType, PartialType } from "@nestjs/swagger";
 import { IsOptional } from "class-validator";
 import { IsObjectId } from "class-validator-mongo-object-id";
-import { CreateEmployeeDto } from "./create-employee.dto";
+import { EmployeeDto } from "./employee.dto";
 
-export class FilterEmployeeDto extends PartialType(OmitType(CreateEmployeeDto, ['password'] as const)) {
+export class FilterEmployeeDto extends PartialType(OmitType(EmployeeDto, ['password'] as const)) {
 
     @ApiProperty()
     @IsObjectId()
