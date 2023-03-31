@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
+import { IsObjectId } from "class-validator-mongo-object-id";
 
 export class RoutineDto {
     @ApiProperty()
@@ -19,4 +20,9 @@ export class RoutineDto {
     @IsArray()
     @Type(() => String)
     links: string[];
+
+    @ApiProperty()
+    @IsObjectId()
+    @IsOptional()
+    attachment: string;
 }

@@ -3,6 +3,7 @@ import { Type } from "class-transformer";
 import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, ValidateNested } from "class-validator";
 import { Dish } from "../../../shared/enums/dish";
 import { Meal } from "src/shared/enums/meal";
+import { IsObjectId } from "class-validator-mongo-object-id";
 
 class Ingredient {
     @ApiProperty()
@@ -52,4 +53,9 @@ export class RecipeDto {
     @ValidateNested({each: true})
     @Type(() => Ingredient)
     ingredients: Ingredient[];
+
+    @ApiProperty()
+    @IsObjectId()
+    @IsOptional()
+    attachment: string;
 }

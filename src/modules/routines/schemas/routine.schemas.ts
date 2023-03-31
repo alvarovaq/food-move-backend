@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 export type RoutineDocument = Routine & Document;
 
@@ -14,6 +14,9 @@ export class Routine {
 
   @Prop({type: [String]})
   links: string[];
+
+  @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'attachments'})
+  attachment: mongoose.Schema.Types.ObjectId;
 }
 
 export const RoutineSchema = SchemaFactory.createForClass(Routine);
