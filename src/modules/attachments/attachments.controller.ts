@@ -1,11 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, UseInterceptors, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, UseInterceptors, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator, UseGuards } from '@nestjs/common';
 import { AttachmentsService } from './attachments.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AttachmentStorage, DESTINATION_ATTACHMENTS, MAX_SIZE_ATTACHMENT } from '../../constants/uploads.constants';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 
 @ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags('attachments')
 @Controller('attachments')
 export class AttachmentsController {
