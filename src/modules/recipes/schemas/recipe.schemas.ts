@@ -23,9 +23,9 @@ export class Recipe {
   links: string[];
 
   @Prop({
-    type: [{name:{type: String, required: true}, quantity:{type: Number}, unit: {type: String}}]
+    type: [{name:{type: String, required: true}, quantity:{type: Number}, unit: {type: String}, isChecked:{type: Boolean, default: false}}]
   })
-  ingredients: {name: string; quantity: number; unit: string}[];
+  ingredients: {name: string; quantity: number; unit: string, isChecked: boolean}[];
 
   @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'attachments'})
   attachment: mongoose.Schema.Types.ObjectId;
