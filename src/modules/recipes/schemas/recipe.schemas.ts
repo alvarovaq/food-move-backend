@@ -22,6 +22,9 @@ export class Recipe {
   @Prop({type: [String]})
   links: string[];
 
+  @Prop({type: [String]})
+  videos: string[];
+
   @Prop({
     type: [{name:{type: String, required: true}, quantity:{type: Number}, unit: {type: String}, isChecked:{type: Boolean, default: false}}]
   })
@@ -29,7 +32,6 @@ export class Recipe {
 
   @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'attachments'})
   attachment: mongoose.Schema.Types.ObjectId;
-
 }
 
 export const RecipeSchema = SchemaFactory.createForClass(Recipe);

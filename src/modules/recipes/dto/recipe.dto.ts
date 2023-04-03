@@ -49,6 +49,11 @@ export class RecipeDto {
     @Type(() => String)
     links: string[];
 
+    @ApiProperty({isArray: true, type: String})
+    @IsArray()
+    @Type(() => String)
+    videos: string[];
+
     @ApiProperty()
     @ValidateNested({each: true})
     @Type(() => Ingredient)

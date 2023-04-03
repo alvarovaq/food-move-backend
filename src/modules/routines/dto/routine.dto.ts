@@ -21,6 +21,11 @@ export class RoutineDto {
     @Type(() => String)
     links: string[];
 
+    @ApiProperty({isArray: true, type: String})
+    @IsArray()
+    @Type(() => String)
+    videos: string[];
+
     @ApiProperty()
     @IsObjectId()
     @IsOptional()

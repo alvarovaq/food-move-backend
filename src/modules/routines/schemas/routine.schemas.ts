@@ -15,6 +15,9 @@ export class Routine {
   @Prop({type: [String]})
   links: string[];
 
+  @Prop({type: [String]})
+  videos: string[];
+
   @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'attachments'})
   attachment: mongoose.Schema.Types.ObjectId;
 }
