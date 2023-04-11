@@ -9,6 +9,7 @@ import { QueryEmployeeDto } from './dto/query-employee.dto';
 import { CustomQueryService } from '../../services/custom-query.service';
 import { FilesService } from '../files/files.service';
 import { compare, hash } from 'bcrypt';
+import { ChangePasswordDto } from 'src/shared/dto/change-password.dto';
 
 @Injectable()
 export class EmployeesService {
@@ -21,7 +22,7 @@ export class EmployeesService {
 
   async findOne(id: string) {
     const employee = await this.employeeModel.findById(id);
-    if (!employee) throw new NotFoundException('No se ha encontrado al empleado');
+    if (!employee) throw new NotFoundException('No se ha encontrado al profesional');
     return employee;
   }
 
@@ -38,9 +39,9 @@ export class EmployeesService {
   async create(employeeDto: EmployeeDto) {
     const {email, password} = employeeDto;
     const findEmployee = await this.employeeModel.findOne({email});
-    if (findEmployee) throw new NotFoundException('Ya existe un empleado con ese email');
-    const new_password = await hash(password, 10);
-    const employee = {...employeeDto, password: new_password};
+    if (findEmployee) throw new NotFoundException('Ya existe un profesional con ese email');
+    const newPassword = await hash(password, 10);
+    const employee = {...employeeDto, password: newPassword};
     const createdEmployee = await this.employeeModel.create(employee);
     return createdEmployee;
   }
@@ -54,13 +55,13 @@ export class EmployeesService {
       }
     }
     const updatedEmployee = await this.employeeModel.findByIdAndUpdate(id, updateEmployeeDto, {new: true});
-    if (!updatedEmployee) throw new NotFoundException('No se ha encontrado al empleado');
+    if (!updatedEmployee) throw new NotFoundException('No se ha encontrado al profesional');
     return updatedEmployee;
   }
 
   async remove(id: string) {
     const deletedEmployee = await this.employeeModel.findByIdAndDelete(id);
-    if (!deletedEmployee) throw new NotFoundException('No se ha encontrado al empleado');
+    if (!deletedEmployee) throw new NotFoundException('No se ha encontrado al profesional');
     return deletedEmployee;
   }
 
@@ -81,6 +82,16 @@ export class EmployeesService {
     const isMatch = await compare(password, user.password);
     if (!isMatch) throw new NotFoundException('Contraseña incorrecta');
     return user;
+  }
+
+  async changePassword (id: string, changePasswordDto: ChangePasswordDto) {
+    const {password, newPassword} = changePasswordDto;
+    const employee = await this.employeeModel.findById(id);
+    if (!employee) throw new NotFoundException('No se ha encontrado al profesional');
+    const isMatch = await compare(password, employee.password);
+    if (!isMatch) throw new NotFoundException('Contraseña incorrecta');
+    const hashPassword = await hash(newPassword, 10);
+    return await this.employeeModel.findByIdAndUpdate(id, {password: hashPassword}, {new: true});
   }
 
 }

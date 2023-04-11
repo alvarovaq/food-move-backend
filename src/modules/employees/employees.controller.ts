@@ -10,6 +10,7 @@ import { QueryEmployeeDto } from './dto/query-employee.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Storage } from 'src/constants/uploads.constants';
 import { MAX_SIZE_IMAGE } from '../../constants/uploads.constants';
+import { ChangePasswordDto } from 'src/shared/dto/change-password.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -58,5 +59,10 @@ export class EmployeesController {
   async removeProfileImage (@Param('id') id: string) {
     return await this.employeesService.removeProfileImage(id);
   } 
+
+  @Post('change-password/:id')
+  async changePassword (@Param('id') id: string, @Body() changePasswordDto: ChangePasswordDto) {
+    this.employeesService.changePassword(id, changePasswordDto);
+  }
   
 }
