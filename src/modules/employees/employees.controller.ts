@@ -62,7 +62,7 @@ export class EmployeesController {
 
   @Post('change-password/:id')
   async changePassword (@Param('id') id: string, @Body() changePasswordDto: ChangePasswordDto) {
-    this.employeesService.changePassword(id, changePasswordDto);
+    return await this.employeesService.changePassword(id, changePasswordDto);
   }
   
 }
