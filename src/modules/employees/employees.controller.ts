@@ -3,7 +3,6 @@ import { EmployeesService } from './employees.service';
 import { EmployeeDto } from './dto/employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { ValidationTypes } from 'class-validator';
 import { FilterEmployeeDto } from './dto/filter-employee.dto';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 import { QueryEmployeeDto } from './dto/query-employee.dto';

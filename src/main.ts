@@ -10,6 +10,7 @@ async function bootstrap() {
     transform: true,
     whitelist: true // Los parámetros que no están definidos en los dto se eliminan
   }));
+  app.setGlobalPrefix('api');
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('Food & Move API Documentation')
