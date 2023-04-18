@@ -8,6 +8,7 @@ import { FilterConsultDto } from './dto/filter-consult.dto';
 import { QueryConsultDto } from './dto/query-consult.dto';
 import { UpdateConsultDto } from './dto/update-consult.dto';
 import { Consult, ConsultDocument } from './schemas/consult.schema';
+import { DateRangeDto } from 'src/shared/dto/date-range.dto';
 
 @Injectable()
 export class ConsultsService {
@@ -60,5 +61,16 @@ export class ConsultsService {
     consults.forEach(async (consult) => {
       const deletedConsult = await this.consultModel.findByIdAndDelete(consult._id);
     });
+  }
+
+  async getValues (id: string, key: string, dateRangeDto: DateRangeDto) {
+    const consults = await this.consultModel.find({
+      patient: id,
+      date: {
+        $gte: dateRangeDto.startDate,
+        $lte: dateRangeDto.endDate
+      }
+    });
+    return consults.filter((consult) => consult[key]).map((consult) => {return {date: consult.created_at, value: consult[key]}}).sort((a, b) => a.date > b.date ? -1 : a.date < b.date ? 1 : 0);
   }
 }

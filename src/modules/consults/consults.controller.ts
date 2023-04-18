@@ -6,6 +6,7 @@ import { ConsultDto } from './dto/consult.dto';
 import { FilterConsultDto } from './dto/filter-consult.dto';
 import { UpdateConsultDto } from './dto/update-consult.dto';
 import { QueryConsultDto } from './dto/query-consult.dto';
+import { DateRangeDto } from 'src/shared/dto/date-range.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -43,4 +44,9 @@ export class ConsultsController {
   async remove(@Param('id') id: string) {
     return await this.consultsService.remove(id);
   }
+
+  @Post('getValues/:id/:key')
+  async getValues (@Param('id') id: string, @Param('key') key: string, @Body() dateRangeDto: DateRangeDto) {
+    return await this.consultsService.getValues(id, key, dateRangeDto);
+  } 
 }
