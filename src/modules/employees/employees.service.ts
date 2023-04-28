@@ -11,6 +11,7 @@ import { FilesService } from '../files/files.service';
 import { compare, hash } from 'bcrypt';
 import { ChangePasswordDto } from 'src/shared/dto/change-password.dto';
 import { MailService } from '../mail/mail.service';
+import { newRandomPassword } from 'src/utils/utils';
 
 @Injectable()
 export class EmployeesService {
@@ -39,13 +40,14 @@ export class EmployeesService {
   }
 
   async create(employeeDto: EmployeeDto) {
-    const {email, password} = employeeDto;
+    const {email} = employeeDto;
     const findEmployee = await this.employeeModel.findOne({email});
     if (findEmployee) throw new NotFoundException('Ya existe un profesional con ese email');
+    const password = newRandomPassword();
     const newPassword = await hash(password, 10);
     const employee = {...employeeDto, password: newPassword};
     const createdEmployee = await this.employeeModel.create(employee);
-    await this.mailService.sendWelcomeEmployee(employee, "123456789");
+    await this.mailService.sendWelcomeEmployee(employee, password);
     return createdEmployee;
   }
 
