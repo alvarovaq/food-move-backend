@@ -5,14 +5,17 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { EmployeeSchema } from './schema/employee.schema';
 import { CustomQueryService } from '../../services/custom-query.service';
 import { FilesService } from '../files/files.service';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [MongooseModule.forFeature([
-    {
-      name: 'employees',
-      schema: EmployeeSchema
-    }
-  ])],
+      {
+        name: 'employees',
+        schema: EmployeeSchema
+      }
+    ]),
+    MailModule
+  ],
   controllers: [EmployeesController],
   providers: [EmployeesService, FilesService, CustomQueryService],
   exports: [EmployeesService]

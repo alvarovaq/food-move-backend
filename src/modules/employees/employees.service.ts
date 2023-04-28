@@ -10,6 +10,7 @@ import { CustomQueryService } from '../../services/custom-query.service';
 import { FilesService } from '../files/files.service';
 import { compare, hash } from 'bcrypt';
 import { ChangePasswordDto } from 'src/shared/dto/change-password.dto';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class EmployeesService {
@@ -17,7 +18,8 @@ export class EmployeesService {
   constructor (
     private readonly customQueryService: CustomQueryService,
     @Inject(FilesService) private readonly filesService: FilesService,
-    @InjectModel('employees') private readonly employeeModel: Model<EmployeeDocument>
+    @InjectModel('employees') private readonly employeeModel: Model<EmployeeDocument>,
+    @Inject(MailService) private readonly mailService: MailService
   ) {}
 
   async findOne(id: string) {
@@ -43,6 +45,7 @@ export class EmployeesService {
     const newPassword = await hash(password, 10);
     const employee = {...employeeDto, password: newPassword};
     const createdEmployee = await this.employeeModel.create(employee);
+    await this.mailService.sendWelcomeEmployee(employee, "123456789");
     return createdEmployee;
   }
 
