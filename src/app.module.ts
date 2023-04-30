@@ -16,11 +16,17 @@ import { FilesModule } from './modules/files/files.module';
 import { DietsModule } from './modules/diets/diets.module';
 import { AttachmentsModule } from './modules/attachments/attachments.module';
 import { MailModule } from './modules/mail/mail.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [MongooseModule.forRoot('mongodb+srv://7alvaq7:a1b2c3d4@cluster0.t7lmmdf.mongodb.net/?retryWrites=true&w=majority', {
     useNewUrlParser: true
-  }), EmployeesModule, PatientsModule, ConsultsModule, RecipesModule, RoutinesModule, FoodsModule, MovesModule, AuthModule, FilesModule, DietsModule, AttachmentsModule, MailModule],
+  }),
+  ConfigModule.forRoot({
+    isGlobal: true,
+    envFilePath: process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'
+  }),
+  EmployeesModule, PatientsModule, ConsultsModule, RecipesModule, RoutinesModule, FoodsModule, MovesModule, AuthModule, FilesModule, DietsModule, AttachmentsModule, MailModule],
   controllers: [AppController],
   providers: [AppService, CustomQueryService, UploadsService],
 })
