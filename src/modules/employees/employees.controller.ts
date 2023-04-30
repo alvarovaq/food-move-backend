@@ -10,6 +10,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Storage } from 'src/constants/uploads.constants';
 import { MAX_SIZE_IMAGE } from '../../constants/uploads.constants';
 import { ChangePasswordDto } from 'src/shared/dto/change-password.dto';
+import { RecoverPasswordDto } from './dto/recover-password.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -67,6 +68,11 @@ export class EmployeesController {
   @Get('forgotPassword/:email')
   async forgotPassword (@Param('email') email: string) {
     return await this.employeesService.forgotPassword(email);
+  }
+
+  @Post('recoverPassword')
+  async recoverPassword (@Body() recoverPasswordDto: RecoverPasswordDto) {
+    return await this.employeesService.recoverPassword(recoverPasswordDto.token, recoverPasswordDto.password);
   }
   
 }
