@@ -10,11 +10,20 @@ export class MailService {
         await this.mailerService.sendMail({
             to: user.email,
             subject: 'Bienvenido a Food & Move',
-            template: './welcome_employee',
+            template: './welcome-employee',
             context: {
                 name: user.name,
                 password: password
             }
+        });
+    }
+
+    async sendForgotPassword (email: string, url: string, time: string) {
+        await this.mailerService.sendMail({
+            to: email,
+            subject: 'Restablecer contraseña - Food & Move',
+            template: './forgot-password',
+            context: {url, time}
         });
     }
 
