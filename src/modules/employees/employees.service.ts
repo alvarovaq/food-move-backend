@@ -114,6 +114,7 @@ export class EmployeesService {
     const url = baseUrl + 'auth/recoverPassword/' + token;
     const time = jwtForgotPassword.expiresIn;
     await this.mailService.sendForgotPassword(email, url, time);
+    return true;
   }
 
   async recoverPassword (token: string, password: string) {
