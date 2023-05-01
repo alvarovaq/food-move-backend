@@ -8,12 +8,12 @@ export class DateRangeDto {
     @IsNotEmpty()
     @IsDate()
     @Type(() => Date)
-    startDate: Date;
+    startDate: Date | null;
 
     @ApiProperty()
     @IsNotEmpty()
     @IsDate()
     @Type(() => Date)
-    endDate: Date;
+    endDate: Date | null;
 
 }
