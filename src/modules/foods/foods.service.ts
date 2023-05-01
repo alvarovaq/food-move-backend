@@ -9,6 +9,7 @@ import { DateRangeDto } from '../../shared/dto/date-range.dto';
 import { DietsService } from '../diets/diets.service';
 import { asyncForEach } from 'src/utils/utils';
 import { addDay, getDateRange } from 'src/utils/date-utils';
+import { getQueryDate } from 'src/utils/filter-dates.utils';
 
 @Injectable()
 export class FoodsService {
@@ -59,13 +60,7 @@ export class FoodsService {
   }
 
   async findByPatient (idPatient: string, dateRangeDto: DateRangeDto) {
-    const foods = await this.foodModel.find({
-      patient: idPatient,
-      date: {
-        $gte: dateRangeDto.startDate,
-        $lte: dateRangeDto.endDate
-      }
-    });
+    const foods = await this.foodModel.find(getQueryDate({patient: idPatient}, dateRangeDto, 'date'));
     return foods;
   }
 

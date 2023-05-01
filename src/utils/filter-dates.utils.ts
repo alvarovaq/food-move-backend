@@ -1,6 +1,8 @@
 import { DateRangeDto } from "src/shared/dto/date-range.dto";
 
-export function filterDateRange (dateRangeDto: DateRangeDto): {$gte?: Date, $lte?: Date} {
+export type FilterDate = {$gte?: Date, $lte?: Date};
+
+export function filterDateRange (dateRangeDto: DateRangeDto): FilterDate {
     let object = {};
     if (dateRangeDto.startDate) object = {$gte: dateRangeDto.startDate};
     if (dateRangeDto.endDate) object = {...object, $lte: dateRangeDto.endDate};
