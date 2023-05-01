@@ -4,7 +4,7 @@ import path = require('path');
 
 export const DESTINATION_PROFILE_IMAGE = './uploads/profileimages';
 export const DEFAULT_PROFILE_IMAGE = 'default.png';
-export const MAX_SIZE_IMAGE = 1 * 1000 * 1000;
+export const MAX_SIZE_IMAGE = 10 * 1000 * 1000;
 export const imageFileFilter = (req, file, callback) => {
     if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
       return callback(new Error('El archivo no cumple los requisitos'), false);
@@ -25,7 +25,7 @@ export const Storage = {
 }
 
 export const DESTINATION_ATTACHMENTS = './uploads/attachments';
-export const MAX_SIZE_ATTACHMENT = 1 * 1000 * 1000;
+export const MAX_SIZE_ATTACHMENT = 10 * 1000 * 1000;
 export const attachmentFileFilter = (req, file, callback) => {
     if (!file.originalname.match(/\.(pdf)$/)) {
       return callback(new Error('El archivo no cumple los requisitos'), false);
