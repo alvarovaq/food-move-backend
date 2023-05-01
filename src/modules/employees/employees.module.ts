@@ -9,6 +9,7 @@ import { MailModule } from '../mail/mail.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtForgotPassword } from './constants/jwt-forgot-password.constants';
 import { JwtForgotPasswordStrategy } from './strategys/jwt-forgot-password.strategy';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [MongooseModule.forFeature([
@@ -17,6 +18,7 @@ import { JwtForgotPasswordStrategy } from './strategys/jwt-forgot-password.strat
         schema: EmployeeSchema
       }
     ]),
+    PassportModule,
     JwtModule.register({
       secret: jwtForgotPassword.secret,
       signOptions: { expiresIn: jwtForgotPassword.expiresIn }
