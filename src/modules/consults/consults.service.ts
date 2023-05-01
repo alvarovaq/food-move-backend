@@ -9,6 +9,7 @@ import { QueryConsultDto } from './dto/query-consult.dto';
 import { UpdateConsultDto } from './dto/update-consult.dto';
 import { Consult, ConsultDocument } from './schemas/consult.schema';
 import { DateRangeDto } from 'src/shared/dto/date-range.dto';
+import { getQueryDate } from 'src/utils/filter-dates.utils';
 
 @Injectable()
 export class ConsultsService {
@@ -64,13 +65,7 @@ export class ConsultsService {
   }
 
   async getValues (id: string, key: string, dateRangeDto: DateRangeDto) {
-    const consults = await this.consultModel.find({
-      patient: id,
-      date: {
-        $gte: dateRangeDto.startDate,
-        $lte: dateRangeDto.endDate
-      }
-    });
+    const consults = await this.consultModel.find(getQueryDate({patient: id}, dateRangeDto, 'created_at'));
     return consults.filter((consult) => consult[key]).map((consult) => {return {date: consult.created_at, value: consult[key]}}).sort((a, b) => a.date > b.date ? -1 : a.date < b.date ? 1 : 0);
   }
 }
