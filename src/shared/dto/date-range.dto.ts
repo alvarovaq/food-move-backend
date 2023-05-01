@@ -5,15 +5,13 @@ import { IsDate, IsNotEmpty } from "class-validator";
 export class DateRangeDto {
 
     @ApiProperty()
-    @IsNotEmpty()
     @IsDate()
     @Type(() => Date)
-    startDate: Date | null;
+    startDate: Date | null | undefined;
 
     @ApiProperty()
-    @IsNotEmpty()
     @IsDate()
     @Type(() => Date)
-    endDate: Date | null;
+    endDate: Date | null | undefined;
 
 }
