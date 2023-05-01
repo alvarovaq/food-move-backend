@@ -106,7 +106,7 @@ export class EmployeesService {
   }
 
   async forgotPassword (email: string) {
-    const employee = await this.employeeModel.find({email});
+    const employee = await this.employeeModel.findOne({email});
     if (!employee) throw new NotFoundException('No se ha encontrado al profesional');
     const token = await this.jwtService.sign({email});
     const isProduction = this.configService.get<boolean>('production');
@@ -121,11 +121,12 @@ export class EmployeesService {
     try {
       const payload = await this.jwtService.verify(token);
       const email = payload.email;
-      const employee = await this.employeeModel.find(email);
+      const employee = await this.employeeModel.findOne({email});
       if (!employee) throw new NotFoundException('No se ha encontrado al profesional');
       const hashPassword = await hash(password, 10);
       return await this.employeeModel.findOneAndUpdate({email}, {password: hashPassword}, {new: true});
     } catch (error) {
+      console.log(error);
       throw new  NotFoundException('Token no válido');
     }
   }
