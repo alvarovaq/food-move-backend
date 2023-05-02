@@ -45,9 +45,7 @@ export class PatientsService {
     const {phone, password} = patientDto;
     const findPatient = await this.patientModel.findOne({phone});
     if (findPatient) throw new NotFoundException('Ya existe un paciente con ese teléfono');
-    const new_password = await hash(password, 10);
-    const patient = {...patientDto, password: new_password};
-    const createdPatient = await this.patientModel.create(patient);
+    const createdPatient = await this.patientModel.create(patientDto);
     return createdPatient;
   }
 
@@ -87,7 +85,7 @@ export class PatientsService {
   async login (phone: string, password: string) {
     const user = await this.patientModel.findOne({phone});
     if (!user) throw new NotFoundException('No se ha encontrado al usuario');
-    const isMatch = await compare(password, user.password);
+    const isMatch = password === user.password;
     if (!isMatch) throw new NotFoundException('Contraseña incorrecta');
     return user;
   }
