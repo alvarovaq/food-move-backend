@@ -19,11 +19,6 @@ export class PatientsController {
     private readonly patientsService: PatientsService
   ) {}
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return await this.patientsService.findOne(id);
-  }
-
   @Post('lookUp')
   async lookUp(@Body() filterPatientDto: FilterPatientDto) {
     return await this.patientsService.lookUp(filterPatientDto);
@@ -63,6 +58,11 @@ export class PatientsController {
   @Get('randomPassword')
   async randomPassword () {
     return await this.patientsService.randomPassword();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return await this.patientsService.findOne(id);
   }
 
 }

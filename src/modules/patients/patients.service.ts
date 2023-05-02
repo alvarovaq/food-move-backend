@@ -11,7 +11,6 @@ import { PatientDocument } from './schemas/patient.schema';
 import { CustomQueryService } from 'src/services/custom-query.service';
 import { FilterPatientDto } from './dto/filter-patient.dto';
 import { FilesService } from '../files/files.service';
-import { compare, hash } from 'bcrypt';
 import { newRandomPassword } from 'src/utils/utils';
 
 @Injectable()
@@ -92,7 +91,8 @@ export class PatientsService {
   }
 
   async randomPassword () {
-    return newRandomPassword();
+    const password = newRandomPassword();
+    return password;
   }
 
 }
