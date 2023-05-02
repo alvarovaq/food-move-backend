@@ -92,7 +92,7 @@ export class PatientsService {
 
   async randomPassword () {
     const password = newRandomPassword();
-    return password;
+    return {password};
   }
 
 }
