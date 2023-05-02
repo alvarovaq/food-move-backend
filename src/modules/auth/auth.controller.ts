@@ -20,9 +20,4 @@ export class AuthController {
         return await this.authService.loginEmployee(authEmployeeDto);
     }
 
-    @Get('randomPassword')
-    async randomPassword () {
-        return await this.authService.randomPassword();
-    }
-
 }

@@ -4,7 +4,6 @@ import { EmployeesService } from '../employees/employees.service';
 import { PatientsService } from '../patients/patients.service';
 import { AuthEmployeeDto } from './dto/auth-employee.dto';
 import { AuthPatientDto } from './dto/auth-patient.dto';
-import { newRandomPassword } from 'src/utils/utils';
 
 @Injectable()
 export class AuthService {
@@ -37,10 +36,6 @@ export class AuthService {
             token
         };
         return data;
-    }
-
-    async randomPassword () {
-        return newRandomPassword();
     }
 
 }

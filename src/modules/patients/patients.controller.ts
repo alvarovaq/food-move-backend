@@ -60,4 +60,9 @@ export class PatientsController {
     return await this.patientsService.removeProfileImage(id);
   } 
 
+  @Get('randomPassword')
+  async randomPassword () {
+    return await this.patientsService.randomPassword();
+  }
+
 }
