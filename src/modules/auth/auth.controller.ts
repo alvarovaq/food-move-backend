@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { AuthEmployeeDto } from './dto/auth-employee.dto';
 import { AuthService } from './auth.service';
@@ -18,6 +18,11 @@ export class AuthController {
     @Post('loginEmployee')
     async loginEmployee (@Body() authEmployeeDto: AuthEmployeeDto) {
         return await this.authService.loginEmployee(authEmployeeDto);
+    }
+
+    @Get('randomPassword')
+    async randomPassword () {
+        return await this.authService.randomPassword();
     }
 
 }
