@@ -1,4 +1,4 @@
 export const DEFAULT_LIMIT = 30;
 
 export const URL_FRONT_DEV = 'http://localhost:4200/';
-export const URL_FRONT_PROD = 'http://109.234.71.9/';
+export const URL_FRONT_PROD = 'https://109.234.71.9/';
