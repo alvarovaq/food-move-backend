@@ -74,9 +74,9 @@ export class EmployeesController {
     return await this.employeesService.changePassword(id, changePasswordDto);
   }
 
-  @Get('forgotPassword/:email')
-  async forgotPassword (@Param('email') email: string) {
-    return await this.employeesService.forgotPassword(email);
+  @Post('forgotPassword/:email')
+  async forgotPassword (@Param('email') email: string, @Body() urlBase: {url: string}) {
+    return await this.employeesService.forgotPassword(email, urlBase.url);
   }
   
   @Post('recoverPassword')

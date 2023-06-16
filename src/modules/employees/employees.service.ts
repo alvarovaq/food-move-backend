@@ -14,7 +14,6 @@ import { MailService } from '../mail/mail.service';
 import { newRandomPassword } from 'src/utils/utils';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { URL_FRONT_DEV, URL_FRONT_PROD } from 'src/constants/app.constants';
 import { jwtForgotPassword } from './constants/jwt-forgot-password.constants';
 
 @Injectable()
@@ -25,8 +24,7 @@ export class EmployeesService {
     @Inject(FilesService) private readonly filesService: FilesService,
     @InjectModel('employees') private readonly employeeModel: Model<EmployeeDocument>,
     @Inject(MailService) private readonly mailService: MailService,
-    private readonly jwtService: JwtService,
-    private readonly configService: ConfigService
+    private readonly jwtService: JwtService
   ) {}
 
   async findOne(id: string) {
@@ -105,13 +103,11 @@ export class EmployeesService {
     return await this.employeeModel.findByIdAndUpdate(id, {password: hashPassword}, {new: true});
   }
 
-  async forgotPassword (email: string) {
+  async forgotPassword (email: string, urlBase: string) {
     const employee = await this.employeeModel.findOne({email});
     if (!employee) throw new NotFoundException('No se ha encontrado al profesional');
     const token = await this.jwtService.sign({email});
-    const isProduction = this.configService.get<boolean>('production');
-    const baseUrl = isProduction ? URL_FRONT_PROD : URL_FRONT_DEV;
-    const url = baseUrl + 'auth/recoverPassword/' + token;
+    const url = urlBase + 'auth/recoverPassword/' + token;
     const time = jwtForgotPassword.expiresIn;
     await this.mailService.sendForgotPassword(email, url, time);
     return true;
